@@ -1,101 +1,198 @@
-import { useState } from 'preact/hooks'
-import chairImg1 from '../../assets/products/chair-1.jpg'
-import chairImg2 from '../../assets/products/chair-2.jpg'
-import vaseImg1 from '../../assets/products/vase-1.jpg'
-import vaseImg2 from '../../assets/products/vase-2.jpg'
-import boardImg1 from '../../assets/products/board-1.jpg'
-import boardImg2 from '../../assets/products/board-2.jpg'
-import bowlImg1 from '../../assets/products/bowl-1.jpg'
-import bowlImg2 from '../../assets/products/bowl-2.jpg'
+import { useState, useRef } from "preact/hooks";
+
+// Original product images (light background)
+import chairImg1 from "../../assets/products/chair-1.jpg";
+import vaseImg1 from "../../assets/products/vase-1.jpg";
+import boardImg1 from "../../assets/products/board-1.jpg";
+import bowlImg1 from "../../assets/products/bowl-1.jpg";
+import chairImg2 from "../../assets/products/chair-2.jpg";
+import vaseImg2 from "../../assets/products/vase-2.jpg";
+import boardImg2 from "../../assets/products/board-2.jpg";
+import bowlImg2 from "../../assets/products/bowl-2.jpg";
+
+// Green background product images (#055531)
+import chairImg1Green from "../../assets/products/chair-1-green.png";
+import vaseImg1Green from "../../assets/products/vase-1-green.png";
+import boardImg1Green from "../../assets/products/board-1-green.png";
+import bowlImg1Green from "../../assets/products/bowl-1-green.png";
+import chairImg2Green from "../../assets/products/chair-2-green.png";
+import vaseImg2Green from "../../assets/products/vase-2-green.png";
+import boardImg2Green from "../../assets/products/board-2-green.png";
+import bowlImg2Green from "../../assets/products/bowl-2-green.png";
 
 interface SignatureProduct {
-  id: string
-  name: string
-  tags: string[]
-  images: [string, string]
-  description: string
-  whatsappText: string
+  id: string;
+  name: string;
+  tags: string[];
+  greenImage: string;  // shown first (#055531 bg)
+  image: string;       // shown second (original, swipe to reveal)
+  description: string;
+  whatsappText: string;
 }
 
 const SIGNATURE_PRODUCTS: SignatureProduct[] = [
   {
-    id: 'sig-chair',
-    name: 'Nordic Solid Oak Chair',
-    tags: ['Solid Oak', 'Handcrafted'],
-    images: [chairImg1, chairImg2],
-    description: 'Minimalist solid oak dining chair with curved backrest and tapered legs.',
-    whatsappText: "Hi WoodPeck, I would like to inquire about the Nordic Solid Oak Chair.",
+    id: "sig-chair-1",
+    name: "Nordic Solid Oak Chair",
+    tags: ["Solid Oak", "Natural Oil Finish"],
+    greenImage: chairImg1Green,
+    image: chairImg1,
+    description:
+      "Minimalist solid oak dining chair with natural curved profile.",
+    whatsappText:
+      "Hi WoodPeck, I would like to inquire about the Nordic Solid Oak Chair.",
   },
   {
-    id: 'sig-vase',
-    name: 'Sculptural Walnut Vase',
-    tags: ['Walnut Wood', 'Organic Finish'],
-    images: [vaseImg1, vaseImg2],
-    description: 'Hand-turned sculptural solid walnut vessel with rich organic timber grain.',
-    whatsappText: "Hi WoodPeck, I would like to inquire about the Sculptural Walnut Vase.",
+    id: "sig-vase-1",
+    name: "Sculptural Walnut Vase",
+    tags: ["Walnut Wood", "Beeswax Polish"],
+    greenImage: vaseImg1Green,
+    image: vaseImg1,
+    description:
+      "Hand-turned sculptural solid walnut vessel with rich timber grain.",
+    whatsappText:
+      "Hi WoodPeck, I would like to inquire about the Sculptural Walnut Vase.",
   },
   {
-    id: 'sig-board',
-    name: 'Artisan Teak Chopping Board',
-    tags: ['Teak Wood', 'Food Safe'],
-    images: [boardImg1, boardImg2],
-    description: 'Vertical end-grain chopping board with rounded handle and organic oil seal.',
-    whatsappText: "Hi WoodPeck, I would like to inquire about the Artisan Teak Chopping Board.",
+    id: "sig-board-1",
+    name: "Artisan Teak Cutting Board",
+    tags: ["Teak Wood", "Food-Safe Oil"],
+    greenImage: boardImg1Green,
+    image: boardImg1,
+    description:
+      "Vertical end-grain chopping board with handle and organic oil seal.",
+    whatsappText:
+      "Hi WoodPeck, I would like to inquire about the Artisan Teak Cutting Board.",
   },
   {
-    id: 'sig-bowl',
-    name: 'Hand-Carved Hardwood Bowl',
-    tags: ['Acacia Wood', 'Zero Chemical'],
-    images: [bowlImg1, bowlImg2],
-    description: 'Artisanal hand-turned salad and serving bowl with satin smooth polished rim.',
-    whatsappText: "Hi WoodPeck, I would like to inquire about the Hand-Carved Hardwood Bowl.",
+    id: "sig-bowl-1",
+    name: "Hand-Carved Hardwood Bowl",
+    tags: ["Acacia Wood", "Zero-Chem Wax"],
+    greenImage: bowlImg1Green,
+    image: bowlImg1,
+    description:
+      "Artisanal hand-turned salad and fruit bowl with satin smooth rim.",
+    whatsappText:
+      "Hi WoodPeck, I would like to inquire about the Hand-Carved Hardwood Bowl.",
   },
-]
+  {
+    id: "sig-chair-2",
+    name: "Natural Ash Wood Chair",
+    tags: ["Ash Wood", "Lye + Soap Paint"],
+    greenImage: chairImg2Green,
+    image: chairImg2,
+    description:
+      "Ergonomic Scandinavian ash chair with tapered legs and warm tone.",
+    whatsappText:
+      "Hi WoodPeck, I would like to inquire about the Natural Ash Wood Chair.",
+  },
+  {
+    id: "sig-vase-2",
+    name: "Golden Teak Artisan Vessel",
+    tags: ["Plantation Teak", "Tung Oil Paint"],
+    greenImage: vaseImg2Green,
+    image: vaseImg2,
+    description:
+      "Slender hand-carved decorative teak vase with satin smooth finish.",
+    whatsappText:
+      "Hi WoodPeck, I would like to inquire about the Golden Teak Artisan Vessel.",
+  },
+  {
+    id: "sig-board-2",
+    name: "Dark Walnut Chopping Block",
+    tags: ["Dark Walnut", "Ebony Stain"],
+    greenImage: boardImg2Green,
+    image: boardImg2,
+    description:
+      "Heavy-duty solid walnut butcher board with recessed hanging hole.",
+    whatsappText:
+      "Hi WoodPeck, I would like to inquire about the Dark Walnut Chopping Block.",
+  },
+  {
+    id: "sig-bowl-2",
+    name: "Deep Walnut Serving Bowl",
+    tags: ["Black Walnut", "Beeswax Seal"],
+    greenImage: bowlImg2Green,
+    image: bowlImg2,
+    description:
+      "Deep round walnut bowl with natural timber grain and organic beeswax polish.",
+    whatsappText:
+      "Hi WoodPeck, I would like to inquire about the Deep Walnut Serving Bowl.",
+  },
+];
 
 function SignatureCard({ product }: { product: SignatureProduct }) {
-  const [activeImg, setActiveImg] = useState<number>(0)
+  const [activeIdx, setActiveIdx] = useState<number>(0);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  const toggleImage = () => {
-    setActiveImg((prev) => (prev === 0 ? 1 : 0))
-  }
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const { scrollLeft, clientWidth } = scrollRef.current;
+    if (clientWidth > 0) {
+      const idx = Math.round(scrollLeft / clientWidth);
+      if (idx !== activeIdx && idx >= 0 && idx < 2) {
+        setActiveIdx(idx);
+      }
+    }
+  };
 
-  const waUrl = `https://wa.me/?text=${encodeURIComponent(product.whatsappText)}`
+  const scrollToImage = (index: number) => {
+    if (!scrollRef.current) return;
+    scrollRef.current.scrollTo({
+      left: index * scrollRef.current.clientWidth,
+      behavior: "smooth",
+    });
+    setActiveIdx(index);
+  };
+
+  const waUrl = `https://wa.me/?text=${encodeURIComponent(product.whatsappText)}`;
 
   return (
     <article className="sig-product-card">
-      <div
-        className="sig-card-image-box"
-        onClick={toggleImage}
-        role="button"
-        tabIndex={0}
-        aria-label={`Toggle view for ${product.name}`}
-      >
-        <img
-          src={product.images[activeImg]}
-          alt={`${product.name} view ${activeImg + 1}`}
-          loading="lazy"
-          className="sig-card-img"
-        />
+      <div className="sig-card-image-box">
+        {/* Horizontal scroll-snap track */}
+        <div
+          ref={scrollRef}
+          className="sig-card-image-scroll"
+          onScroll={handleScroll}
+        >
+          {/* Slide 1: Original light background image (shown by default) */}
+          <div className="sig-image-slide">
+            <img
+              src={product.image}
+              alt={`${product.name} - detail view`}
+              loading="eager"
+              className="sig-card-img"
+            />
+          </div>
 
-        {/* Carousel indicator dots */}
-        <div className="sig-image-dots" onClick={(e) => e.stopPropagation()}>
-          <button
-            type="button"
-            className={`sig-dot ${activeImg === 0 ? 'active' : ''}`}
-            onClick={() => setActiveImg(0)}
-            aria-label="View first image"
-          />
-          <button
-            type="button"
-            className={`sig-dot ${activeImg === 1 ? 'active' : ''}`}
-            onClick={() => setActiveImg(1)}
-            aria-label="View second image"
-          />
+          {/* Slide 2: Green #055531 background image (swipe to reveal) */}
+          <div className="sig-image-slide sig-slide-green-bg">
+            <img
+              src={product.greenImage}
+              alt={`${product.name} - studio view`}
+              loading="lazy"
+              className="sig-card-img"
+            />
+          </div>
+        </div>
+
+        {/* Dot indicators */}
+        <div className="sig-image-dots">
+          {[0, 1].map((idx) => (
+            <button
+              key={idx}
+              type="button"
+              className={`sig-dot ${activeIdx === idx ? "active" : ""}`}
+              onClick={() => scrollToImage(idx)}
+              aria-label={idx === 0 ? "Detail view" : "Studio view"}
+            />
+          ))}
         </div>
       </div>
 
       <div className="sig-card-content">
-        {/* Square capsule badges */}
+        {/* Square capsule badges: wood type + paint/finish */}
         <div className="sig-capsules-row">
           {product.tags.map((tag) => (
             <span key={tag} className="sig-capsule-tag">
@@ -128,18 +225,24 @@ function SignatureCard({ product }: { product: SignatureProduct }) {
         </a>
       </div>
     </article>
-  )
+  );
 }
 
 interface OurProductsProps {
-  onAddToCart?: (product: any) => void
+  onAddToCart?: (product: any) => void;
 }
 
 export function OurProducts({ onAddToCart: _onAddToCart }: OurProductsProps) {
   return (
-    <section id="our-products-section" className="home-section our-products-section" aria-label="Our Signature Products">
+    <section
+      id="our-products-section"
+      className="home-section our-products-section"
+      aria-label="Our Signature Products"
+    >
       <div className="section-header-wrap">
-        <h2 className="section-main-title" style={{ color: '#000000' }}>Our Signature Products</h2>
+        <h2 className="section-main-title" style={{ color: "#000000" }}>
+          Our Signature Products
+        </h2>
       </div>
 
       <div className="signature-products-grid">
@@ -148,5 +251,5 @@ export function OurProducts({ onAddToCart: _onAddToCart }: OurProductsProps) {
         ))}
       </div>
     </section>
-  )
+  );
 }
