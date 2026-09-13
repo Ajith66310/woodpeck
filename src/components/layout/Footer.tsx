@@ -1,33 +1,38 @@
+import logoImg from "../../assets/logo/logo-woodpeck.jpg";
+import { TbBrandInstagram, TbBrandWhatsapp } from "react-icons/tb";
+
 export function Footer() {
   return (
     <footer className="footer">
-      <div className="footer-container">
-        <div className="footer-left">
-          <p className="footer-brand">WoodPeck Timber Co.</p>
-          <p className="footer-text">
-            Mastercrafted 100% solid hardwood furniture, architectural acoustic wall slats, and bespoke heirloom timber for conscious modern living.
-          </p>
+      <img src={logoImg} alt="WoodPeck Logo" className="footer-logo-img" />
+      <div className="footer-bottom-bar">
+        <p className="footer-copy">
+          © {new Date().getFullYear()} WoodPeck. All Rights Reserved.
+        </p>
+        <div className="footer-social-icons">
+          {/* Instagram Icon - Outline / Border only from react-icons */}
+          <a
+            href="https://www.instagram.com/thewoodpeck?utm_source=ig_web_button_share_sheet&stkn=ZDNlZDc0MzIxNw=="
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-social-link"
+            aria-label="Follow WoodPeck on Instagram"
+          >
+            <TbBrandInstagram size={17} strokeWidth={1.75} />
+          </a>
+
+          {/* WhatsApp Icon - Outline / Border only from react-icons */}
+          <a
+            href="https://wa.me/918590123072"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="footer-social-link"
+            aria-label="Chat with WoodPeck on WhatsApp"
+          >
+            <TbBrandWhatsapp size={17} strokeWidth={1.75} />
+          </a>
         </div>
-        <div className="footer-links">
-          <div className="footer-col">
-            <span className="footer-title">Wood Collections</span>
-            <a href="#our-products-section">Dining Tables</a>
-            <a href="#our-products-section">Lounge Chairs</a>
-            <a href="#our-products-section">Acoustic Wall Slats</a>
-            <a href="#our-products-section">Artisan Boards</a>
-          </div>
-          <div className="footer-col">
-            <span className="footer-title">Craft & Quality</span>
-            <a href="#comparison-section">Our Wood Quality</a>
-            <a href="#trust-features-section">Lifetime Warranty</a>
-            <a href="#trust-features-section">Fast Shipping</a>
-            <a href="#newsletter-section">Timber Guild</a>
-          </div>
-        </div>
-      </div>
-      <div className="footer-bottom">
-        <span>© {new Date().getFullYear()} WoodPeck Artisan Timber Co. • 100% Solid Kiln-Dried Hardwood</span>
       </div>
     </footer>
-  )
+  );
 }

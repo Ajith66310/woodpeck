@@ -2,9 +2,8 @@ import { useState } from 'preact/hooks'
 import { HeroBannerSwiper } from '../components/home/HeroBannerSwiper.tsx'
 import { CategoriesSection } from '../components/home/CategoriesSection.tsx'
 import { OurProducts } from '../components/home/OurProducts.tsx'
-import { WoodComparison } from '../components/home/WoodComparison.tsx'
+import { WhyChooseUs } from '../components/home/WhyChooseUs.tsx'
 import { TrustFeatures } from '../components/home/TrustFeatures.tsx'
-import { NewsletterSection } from '../components/home/NewsletterSection.tsx'
 import type { NavTab, Product } from '../types/index.ts'
 
 interface HomeProps {
@@ -38,33 +37,30 @@ export function Home({ onNavigate: _onNavigate }: HomeProps) {
         </div>
       )}
 
-      {/* 1. Hero Section with Banner Swiper - Full width, zero top gap from navbar */}
+      {/* 1. Hero Section with Banner Swiper */}
       <HeroBannerSwiper
         onExploreClick={() => {
           const el = document.getElementById('our-products-section')
           el?.scrollIntoView({ behavior: 'smooth' })
         }}
         onSampleClick={() => {
-          const el = document.getElementById('comparison-section')
+          const el = document.getElementById('our-products-section')
           el?.scrollIntoView({ behavior: 'smooth' })
         }}
       />
 
       <div className="home-sections-wrap">
-        {/* Categories Section with 3 categories (Furniture, Home Decor, Kitchen & Utensils) */}
+        {/* 2. Categories */}
         <CategoriesSection />
 
-        {/* 2. Our Products */}
+        {/* 3. Our Signature Products */}
         <OurProducts onAddToCart={handleAddToCart} />
 
-        {/* 4. Comparison: Our Wood vs Their Wood Quality with ✕ and ✔ mark */}
-        <WoodComparison />
+        {/* 4. Why Choose WoodPeck */}
+        <WhyChooseUs />
 
-        {/* 5. Trust & Value Propositions (Fast Shipping, Price-match guarantee, Hassle-free exchange, 5 Star Reviews) */}
+        {/* 5. Trust Features — Fast Shipping, Price-match, Hassle-free exchange, 5 Star Reviews */}
         <TrustFeatures />
-
-        {/* 6. Newsletter Section */}
-        <NewsletterSection />
       </div>
     </div>
   )
