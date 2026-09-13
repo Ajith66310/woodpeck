@@ -2,7 +2,6 @@ import { useState } from 'preact/hooks'
 import { HeroBannerSwiper } from '../components/home/HeroBannerSwiper.tsx'
 import { CategoriesSection } from '../components/home/CategoriesSection.tsx'
 import { OurProducts } from '../components/home/OurProducts.tsx'
-import { BestSellers } from '../components/home/BestSellers.tsx'
 import { WoodComparison } from '../components/home/WoodComparison.tsx'
 import { TrustFeatures } from '../components/home/TrustFeatures.tsx'
 import { NewsletterSection } from '../components/home/NewsletterSection.tsx'
@@ -57,9 +56,6 @@ export function Home({ onNavigate: _onNavigate }: HomeProps) {
 
         {/* 2. Our Products */}
         <OurProducts onAddToCart={handleAddToCart} />
-
-        {/* 3. Best Seller */}
-        <BestSellers onAddToCart={handleAddToCart} />
 
         {/* 4. Comparison: Our Wood vs Their Wood Quality with ✕ and ✔ mark */}
         <WoodComparison />
