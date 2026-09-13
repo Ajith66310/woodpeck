@@ -1,175 +1,75 @@
 import { useState } from 'preact/hooks'
-import { Card } from '../components/common/Card.tsx'
-import { Button } from '../components/common/Button.tsx'
-import { Badge } from '../components/common/Badge.tsx'
-import type { NavTab } from '../types/index.ts'
+import { HeroBannerSwiper } from '../components/home/HeroBannerSwiper.tsx'
+import { CategoriesSection } from '../components/home/CategoriesSection.tsx'
+import { OurProducts } from '../components/home/OurProducts.tsx'
+import { BestSellers } from '../components/home/BestSellers.tsx'
+import { WoodComparison } from '../components/home/WoodComparison.tsx'
+import { TrustFeatures } from '../components/home/TrustFeatures.tsx'
+import { NewsletterSection } from '../components/home/NewsletterSection.tsx'
+import type { NavTab, Product } from '../types/index.ts'
 
 interface HomeProps {
-  onNavigate: (tab: NavTab) => void
+  onNavigate?: (tab: NavTab) => void
 }
 
-export function Home({ onNavigate }: HomeProps) {
-  const [count, setCount] = useState(0)
+export function Home({ onNavigate: _onNavigate }: HomeProps) {
+  const [toastMessage, setToastMessage] = useState<string | null>(null)
+  const [cartCount, setCartCount] = useState<number>(0)
+
+  const handleAddToCart = (product: Product) => {
+    setCartCount((c) => c + 1)
+    setToastMessage(`Added "${product.name}" to your cart`)
+    setTimeout(() => {
+      setToastMessage(null)
+    }, 3200)
+  }
 
   return (
-    <div className="page home-page">
-      {/* Hero Section */}
-      <section className="hero-section">
-        <div className="hero-pill">
-          <span className="pulsing-dot"></span>
-          <span>Preact v10.29 + Vite + TypeScript Ready</span>
+    <div className="page home-page wood-store-home">
+      {/* Toast Notification */}
+      {toastMessage && (
+        <div className="cart-toast-alert" role="alert">
+          <div className="toast-icon">
+            <svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="currentColor" strokeWidth="3">
+              <polyline points="20 6 9 17 4 12"></polyline>
+            </svg>
+          </div>
+          <span className="toast-text">{toastMessage}</span>
+          <span className="toast-count-pill">{cartCount} in cart</span>
         </div>
+      )}
 
-        <h1 className="hero-title">
-          Ultra-Fast Preact Application <br />
-          <span className="hero-gradient-text">Structured for Scale</span>
-        </h1>
+      {/* 1. Hero Section with Banner Swiper - Full width, zero top gap from navbar */}
+      <HeroBannerSwiper
+        onExploreClick={() => {
+          const el = document.getElementById('our-products-section')
+          el?.scrollIntoView({ behavior: 'smooth' })
+        }}
+        onSampleClick={() => {
+          const el = document.getElementById('comparison-section')
+          el?.scrollIntoView({ behavior: 'smooth' })
+        }}
+      />
 
-        <p className="hero-description">
-          A modern, production-grade folder structure built with Preact's 3kB footprint,
-          TypeScript type-safety, reusable UI components, and state management hooks.
-        </p>
+      <div className="home-sections-wrap">
+        {/* Categories Section with 3 categories (Furniture, Home Decor, Kitchen & Utensils) */}
+        <CategoriesSection />
 
-        <div className="hero-cta-group">
-          <Button
-            variant="primary"
-            size="lg"
-            onClick={() => onNavigate('structure')}
-          >
-            Explore Folder Architecture →
-          </Button>
-          <Button
-            variant="outline"
-            size="lg"
-            onClick={() => onNavigate('components')}
-          >
-            View UI Components
-          </Button>
-        </div>
+        {/* 2. Our Products */}
+        <OurProducts onAddToCart={handleAddToCart} />
 
-        <div className="hero-metrics">
-          <div className="metric-item">
-            <span className="metric-value">~3 kB</span>
-            <span className="metric-label">Runtime Footprint</span>
-          </div>
-          <div className="metric-divider"></div>
-          <div className="metric-item">
-            <span className="metric-value">Instant</span>
-            <span className="metric-label">Vite HMR</span>
-          </div>
-          <div className="metric-divider"></div>
-          <div className="metric-item">
-            <span className="metric-value">100%</span>
-            <span className="metric-label">TypeScript Ready</span>
-          </div>
-          <div className="metric-divider"></div>
-          <div className="metric-item">
-            <span className="metric-value">Modular</span>
-            <span className="metric-label">Architecture</span>
-          </div>
-        </div>
-      </section>
+        {/* 3. Best Seller */}
+        <BestSellers onAddToCart={handleAddToCart} />
 
-      {/* Feature Grid */}
-      <section className="features-grid">
-        <Card
-          title="📁 Organized Directory Architecture"
-          subtitle="Clean separation of concerns"
-          glow
-        >
-          <p className="feature-desc">
-            Organized into <code>components/</code>, <code>pages/</code>, <code>hooks/</code>, 
-            <code>context/</code>, <code>services/</code>, <code>utils/</code>, and <code>types/</code>.
-          </p>
-          <Button
-            variant="ghost"
-            size="sm"
-            onClick={() => onNavigate('structure')}
-          >
-            Inspect Structure →
-          </Button>
-        </Card>
+        {/* 4. Comparison: Our Wood vs Their Wood Quality with ✕ and ✔ mark */}
+        <WoodComparison />
 
-        <Card
-          title="⚡ Reactive Hook State"
-          subtitle="Preact hooks in action"
-        >
-          <p className="feature-desc">
-            Try the interactive counter testing Preact state reactivity:
-          </p>
-          <div className="counter-widget">
-            <span className="counter-display">Current count: <strong>{count}</strong></span>
-            <div className="counter-buttons">
-              <Button
-                variant="secondary"
-                size="sm"
-                onClick={() => setCount((c) => Math.max(0, c - 1))}
-              >
-                - Dec
-              </Button>
-              <Button
-                variant="primary"
-                size="sm"
-                onClick={() => setCount((c) => c + 1)}
-              >
-                + Inc
-              </Button>
-              <Button
-                variant="ghost"
-                size="sm"
-                onClick={() => setCount(0)}
-              >
-                Reset
-              </Button>
-            </div>
-          </div>
-        </Card>
+        {/* 5. Trust & Value Propositions (Fast Shipping, Price-match guarantee, Hassle-free exchange, 5 Star Reviews) */}
+        <TrustFeatures />
 
-        <Card
-          title="🎨 Theme & Styling System"
-          subtitle="Dark & Light mode ready"
-        >
-          <p className="feature-desc">
-            Features an HSL-based CSS token system with smooth transitions, modern cards,
-            and automatic theme persistence via localStorage.
-          </p>
-          <div className="theme-pills">
-            <Badge variant="brand">ThemeContext</Badge>
-            <Badge variant="info">CSS Variables</Badge>
-            <Badge variant="success">Glassmorphism</Badge>
-          </div>
-        </Card>
-      </section>
-
-      {/* Quick Start Guide */}
-      <section className="quickstart-section">
-        <div className="quickstart-card">
-          <h2>Getting Started with this Setup</h2>
-          <div className="steps-list">
-            <div className="step-item">
-              <span className="step-num">1</span>
-              <div>
-                <h4>Add new pages</h4>
-                <p>Create new views in <code>src/pages/YourPage.tsx</code> and route them from <code>src/app.tsx</code>.</p>
-              </div>
-            </div>
-            <div className="step-item">
-              <span className="step-num">2</span>
-              <div>
-                <h4>Create reusable components</h4>
-                <p>Add common UI elements to <code>src/components/common/</code> or layout elements to <code>src/components/layout/</code>.</p>
-              </div>
-            </div>
-            <div className="step-item">
-              <span className="step-num">3</span>
-              <div>
-                <h4>State & Hooks</h4>
-                <p>Encapsulate logic inside <code>src/hooks/</code> and share app-wide data via <code>src/context/</code>.</p>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+        {/* 6. Newsletter Section */}
+        <NewsletterSection />
+      </div>
     </div>
   )
 }

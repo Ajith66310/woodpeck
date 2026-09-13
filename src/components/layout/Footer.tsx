@@ -3,34 +3,30 @@ export function Footer() {
     <footer className="footer">
       <div className="footer-container">
         <div className="footer-left">
-          <p className="footer-brand">Preact + Vite Architecture</p>
+          <p className="footer-brand">WoodPeck Timber Co.</p>
           <p className="footer-text">
-            Engineered with fast 3kB Preact runtime, clean modular folders, and type-safe development.
+            Mastercrafted 100% solid hardwood furniture, architectural acoustic wall slats, and bespoke heirloom timber for conscious modern living.
           </p>
         </div>
         <div className="footer-links">
           <div className="footer-col">
-            <span className="footer-title">Resources</span>
-            <a href="https://preactjs.com/guide/v10/getting-started" target="_blank" rel="noreferrer">
-              Preact Guide
-            </a>
-            <a href="https://preactjs.com/guide/v10/differences-to-react" target="_blank" rel="noreferrer">
-              React Differences
-            </a>
+            <span className="footer-title">Wood Collections</span>
+            <a href="#our-products-section">Dining Tables</a>
+            <a href="#our-products-section">Lounge Chairs</a>
+            <a href="#our-products-section">Acoustic Wall Slats</a>
+            <a href="#our-products-section">Artisan Boards</a>
           </div>
           <div className="footer-col">
-            <span className="footer-title">Ecosystem</span>
-            <a href="https://vite.dev" target="_blank" rel="noreferrer">
-              Vite Documentation
-            </a>
-            <a href="https://github.com/preactjs/preact" target="_blank" rel="noreferrer">
-              Preact GitHub
-            </a>
+            <span className="footer-title">Craft & Quality</span>
+            <a href="#comparison-section">Our Wood Quality</a>
+            <a href="#trust-features-section">Lifetime Warranty</a>
+            <a href="#trust-features-section">Fast Shipping</a>
+            <a href="#newsletter-section">Timber Guild</a>
           </div>
         </div>
       </div>
       <div className="footer-bottom">
-        <span>© {new Date().getFullYear()} Modern Preact Starter • Fully Configured</span>
+        <span>© {new Date().getFullYear()} WoodPeck Artisan Timber Co. • 100% Solid Kiln-Dried Hardwood</span>
       </div>
     </footer>
   )

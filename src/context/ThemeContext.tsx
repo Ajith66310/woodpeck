@@ -7,7 +7,7 @@ import { storageService } from '../services/storage.ts'
 const THEME_KEY = 'preact_app_theme'
 
 export const ThemeContext = createContext<ThemeContextType>({
-  theme: 'dark',
+  theme: 'light',
   toggleTheme: () => {},
   setTheme: () => {}
 })
@@ -17,17 +17,15 @@ interface ThemeProviderProps {
 }
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setThemeState] = useState<Theme>(() => {
-    return storageService.get<Theme>(THEME_KEY, 'dark')
-  })
+  const [theme, setThemeState] = useState<Theme>('light')
 
   useEffect(() => {
-    document.documentElement.setAttribute('data-theme', theme)
-    storageService.set(THEME_KEY, theme)
+    document.documentElement.setAttribute('data-theme', 'light')
+    storageService.set(THEME_KEY, 'light')
   }, [theme])
 
   const toggleTheme = () => {
-    setThemeState((prev) => (prev === 'dark' ? 'light' : 'dark'))
+    setThemeState((prev) => (prev === 'dark' ? 'light' : 'light'))
   }
 
   const setTheme = (newTheme: Theme) => {

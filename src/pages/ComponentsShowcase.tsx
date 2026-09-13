@@ -112,6 +112,33 @@ export function ComponentsShowcase() {
             Cards are built with glassmorphic backdrop filters, responsive padding, and optional header/footer slots.
           </p>
         </Card>
+
+        {/* Typography & Global Fonts */}
+        <Card
+          title="Typography & Fonts"
+          subtitle="Inter & Poppins pairing"
+        >
+          <div style={{ display: 'flex', flexDirection: 'column', gap: '1.25rem' }}>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                <Badge variant="brand">Poppins</Badge>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Headings & Display</span>
+              </div>
+              <h3 className="font-heading" style={{ fontSize: '1.2rem', color: 'var(--text-main)', margin: 0 }}>
+                Sphinx of black quartz, judge my vow
+              </h3>
+            </div>
+            <div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.35rem' }}>
+                <Badge variant="info">Inter</Badge>
+                <span style={{ fontSize: '0.8rem', color: 'var(--text-muted)' }}>Body & UI Copy</span>
+              </div>
+              <p className="font-inter" style={{ fontSize: '0.925rem', color: 'var(--text-muted)', lineHeight: '1.6', margin: 0 }}>
+                The quick brown fox jumps over the lazy dog. Inter delivers crisp legibility across all screen densities.
+              </p>
+            </div>
+          </div>
+        </Card>
       </div>
     </div>
   )

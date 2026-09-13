@@ -53,4 +53,4 @@ Locally preview the production build after running `npm run build`.
 
 - **Tokens**: Defined in `src/styles/variables.css` using HSL colors.
 - **Dark/Light Mode**: Managed automatically via `ThemeContext` (`src/context/ThemeContext.tsx`) and persisted to localStorage.
-- **Typography**: Inter for clean readable interface copy, JetBrains Mono for code blocks.
+- **Typography**: Inter for crisp UI and body text, Poppins for elegant headings and brand accents, and JetBrains Mono for code blocks.
