@@ -39,7 +39,7 @@ export function CategoriesSection({ onSelectCategory }: CategoriesSectionProps) 
   return (
     <section className="home-section categories-section" aria-label="Our Categories">
       <div className="categories-header">
-        <h2 className="categories-main-title">OUR CATEGORIES</h2>
+        <h2 className="categories-main-title" style={{ color: '#000000' }}>OUR CATEGORIES</h2>
       </div>
 
       <div className="categories-grid">
