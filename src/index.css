@@ -821,6 +821,47 @@ code {
   border-radius: 8px 8px 0 0;
 }
 
+/* Horizontal scroll-snap image track */
+.sig-card-image-scroll {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  overflow-x: scroll;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  -ms-overflow-style: none;
+}
+
+.sig-card-image-scroll::-webkit-scrollbar {
+  display: none;
+}
+
+/* Each slide takes exactly the full width of the track */
+.sig-image-slide {
+  flex: 0 0 100%;
+  min-width: 100%;
+  width: 100%;
+  height: 100%;
+  scroll-snap-align: start;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Slide with green #055531 background */
+.sig-slide-green-bg {
+  background-color: #055531;
+}
+
+/* Image with contain fit (for green slide) */
+.sig-img-contain {
+  object-fit: contain !important;
+  padding: 10%;
+  background: #055531;
+  box-sizing: border-box;
+}
+
 .sig-card-img {
   width: 100%;
   height: 100%;
