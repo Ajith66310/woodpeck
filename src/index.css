@@ -2032,7 +2032,7 @@ code {
   display: none !important;
 }
 
-/* On Medium and Large screens (>= 641px), completely HIDE website and display blocker */
+/* On Medium and Large screens (>= 641px), completely hide website and show centered text on white background */
 @media (min-width: 641px) {
   .app-wrapper,
   .sidebar-drawer,
@@ -2047,176 +2047,20 @@ code {
     width: 100vw;
     height: 100vh;
     z-index: 99999;
-    background: radial-gradient(ellipse at 50% 40%, #1e293b 0%, #0f172a 70%, #090d16 100%);
+    background: #ffffff;
     align-items: center;
     justify-content: center;
     padding: 2rem;
-    overflow-y: auto;
     box-sizing: border-box;
   }
-}
 
-/* Desktop Blocked Card Styling */
-.desktop-blocked-card {
-  max-width: 520px;
-  width: 100%;
-  background: rgba(30, 41, 59, 0.78);
-  backdrop-filter: blur(24px);
-  -webkit-backdrop-filter: blur(24px);
-  border: 1px solid rgba(245, 158, 11, 0.28);
-  box-shadow: 0 25px 60px -15px rgba(0, 0, 0, 0.75), 0 0 45px -10px rgba(217, 119, 6, 0.25);
-  border-radius: 24px;
-  padding: 2.75rem 2.25rem;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-  color: #f8fafc;
-  animation: fadeInBlocked 0.4s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-@keyframes fadeInBlocked {
-  from {
-    opacity: 0;
-    transform: translateY(16px) scale(0.97);
+  .desktop-blocked-text {
+    font-family: var(--font-family-sans);
+    font-size: clamp(1.1rem, 2vw, 1.5rem);
+    font-weight: 500;
+    color: #000000;
+    text-align: center;
+    margin: 0;
+    line-height: 1.5;
   }
-  to {
-    opacity: 1;
-    transform: translateY(0) scale(1);
-  }
-}
-
-.blocked-icon-bubble {
-  width: 84px;
-  height: 84px;
-  border-radius: 50%;
-  background: radial-gradient(circle, rgba(217, 119, 6, 0.2) 0%, rgba(180, 83, 9, 0.05) 70%);
-  border: 1px solid rgba(245, 158, 11, 0.35);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1.5rem;
-  box-shadow: 0 0 24px rgba(217, 119, 6, 0.25);
-}
-
-.blocked-badge-row {
-  margin-bottom: 0.85rem;
-}
-
-.blocked-pill {
-  display: inline-block;
-  padding: 0.3rem 0.85rem;
-  border-radius: 9999px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  background: rgba(217, 119, 6, 0.18);
-  color: #fbbf24;
-  border: 1px solid rgba(245, 158, 11, 0.35);
-}
-
-.blocked-heading {
-  font-family: var(--font-family-heading);
-  font-size: 1.65rem;
-  font-weight: 800;
-  letter-spacing: -0.02em;
-  color: #ffffff;
-  margin-bottom: 0.75rem;
-  line-height: 1.25;
-}
-
-.blocked-description {
-  font-size: 0.9375rem;
-  color: #94a3b8;
-  line-height: 1.6;
-  margin-bottom: 1.75rem;
-  max-width: 420px;
-}
-
-.blocked-viewport-stat {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.75rem;
-  width: 100%;
-  padding: 0.85rem 1.25rem;
-  background: rgba(15, 23, 42, 0.65);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  border-radius: 14px;
-  margin-bottom: 1.75rem;
-  font-size: 0.875rem;
-}
-
-.stat-label {
-  color: #94a3b8;
-  font-weight: 500;
-}
-
-.stat-value {
-  font-family: var(--font-family-mono);
-  font-weight: 800;
-  font-size: 1.15rem;
-  color: #f59e0b;
-}
-
-.stat-hint {
-  font-size: 0.75rem;
-  padding: 0.2rem 0.6rem;
-  background: rgba(239, 68, 68, 0.18);
-  color: #f87171;
-  border-radius: 9999px;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  font-weight: 600;
-}
-
-.blocked-instructions {
-  width: 100%;
-  text-align: left;
-  background: rgba(15, 23, 42, 0.4);
-  border-radius: 14px;
-  padding: 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.05);
-  box-sizing: border-box;
-}
-
-.blocked-instructions h4 {
-  font-size: 0.825rem;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: #cbd5e1;
-  margin-bottom: 0.75rem;
-  font-weight: 700;
-}
-
-.blocked-instructions ul {
-  list-style: none;
-  padding: 0;
-  margin: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-}
-
-.blocked-instructions li {
-  font-size: 0.85rem;
-  color: #94a3b8;
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.blocked-instructions li strong {
-  color: #f1f5f9;
-}
-
-.blocked-instructions kbd {
-  background: rgba(255, 255, 255, 0.12);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-radius: 4px;
-  padding: 0.15rem 0.4rem;
-  font-family: var(--font-family-mono);
-  font-size: 0.75rem;
-  color: #f8fafc;
-  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
 }
