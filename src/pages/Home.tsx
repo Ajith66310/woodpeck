@@ -53,14 +53,16 @@ export function Home({ onNavigate: _onNavigate }: HomeProps) {
         {/* 2. Categories */}
         <CategoriesSection />
 
+  {/* 5. Trust Features — Fast Shipping, Price-match, Hassle-free exchange, 5 Star Reviews */}
+        <TrustFeatures />
+        
         {/* 3. Our Signature Products */}
         <OurProducts onAddToCart={handleAddToCart} />
 
         {/* 4. Why Choose WoodPeck */}
         <WhyChooseUs />
 
-        {/* 5. Trust Features — Fast Shipping, Price-match, Hassle-free exchange, 5 Star Reviews */}
-        <TrustFeatures />
+      
       </div>
     </div>
   )
