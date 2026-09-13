@@ -13,8 +13,7 @@ export function WhyChooseUs() {
       {/* Big heading */}
       <h2 className="why-choose-heading">
         WHY CHOOSE THE<br />
-        WOODPECK<br />
-        COLLECTION?
+        WOODPECK COLLECTION?
       </h2>
 
       {/* Brand description */}
