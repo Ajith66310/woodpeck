@@ -20,7 +20,7 @@ import vaseImg2Green from "../../assets/products/vase-2-green.png";
 import boardImg2Green from "../../assets/products/board-2-green.png";
 import bowlImg2Green from "../../assets/products/bowl-2-green.png";
 
-interface SignatureProduct {
+export interface SignatureProduct {
   id: string;
   name: string;
   tags: string[];
@@ -30,7 +30,7 @@ interface SignatureProduct {
   whatsappText: string;
 }
 
-const SIGNATURE_PRODUCTS: SignatureProduct[] = [
+export const SIGNATURE_PRODUCTS: SignatureProduct[] = [
   {
     id: "sig-chair-1",
     name: "Nordic Solid Oak Chair",
@@ -121,7 +121,7 @@ const SIGNATURE_PRODUCTS: SignatureProduct[] = [
   },
 ];
 
-function SignatureCard({ product }: { product: SignatureProduct }) {
+export function SignatureCard({ product }: { product: SignatureProduct }) {
   const [activeIdx, setActiveIdx] = useState<number>(0);
   const scrollRef = useRef<HTMLDivElement | null>(null);
 

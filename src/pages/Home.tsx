@@ -1,6 +1,7 @@
 import { useState } from 'preact/hooks'
 import { HeroBannerSwiper } from '../components/home/HeroBannerSwiper.tsx'
 import { CategoriesSection } from '../components/home/CategoriesSection.tsx'
+import { BestSellers } from '../components/home/BestSellers.tsx'
 import { OurProducts } from '../components/home/OurProducts.tsx'
 import { WhyChooseUs } from '../components/home/WhyChooseUs.tsx'
 import { TrustFeatures } from '../components/home/TrustFeatures.tsx'
@@ -52,15 +53,19 @@ export function Home({ onNavigate: _onNavigate }: HomeProps) {
       <div className="home-sections-wrap">
         {/* 2. Categories */}
         <CategoriesSection />
-
-  {/* 5. Trust Features — Fast Shipping, Price-match, Hassle-free exchange, 5 Star Reviews */}
-        <TrustFeatures />
         
-        {/* 3. Our Signature Products */}
+        {/* 3. Best Sellers */}
+        <BestSellers onAddToCart={handleAddToCart} />
+
+        {/* 4. Our Signature Products */}
         <OurProducts onAddToCart={handleAddToCart} />
 
         {/* 4. Why Choose WoodPeck */}
+        <TrustFeatures />
+        
+  {/* 5. Trust Features — Fast Shipping, Price-match, Hassle-free exchange, 5 Star Reviews */}
         <WhyChooseUs />
+
 
       
       </div>
