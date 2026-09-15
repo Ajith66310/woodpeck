@@ -1,5 +1,6 @@
 import { useState, useEffect } from 'preact/hooks'
 import woodpeckLogo from '../../assets/logo/logo-woodpeck.jpg'
+import { SearchBar } from './SearchBar.tsx'
 
 interface NavbarProps {
   onItemClick?: (index: number) => void
@@ -35,10 +36,13 @@ export function Navbar({ onItemClick: _onItemClick }: NavbarProps) {
     <>
       <header className="navbar sm-navbar">
         <div className="navbar-container">
-          {/* Only Logo Image in Navbar - zero text content */}
+          {/* Logo Image in Navbar */}
           <a href="#" className="navbar-brand" aria-label="WoodPeck Home">
             <img src={woodpeckLogo} alt="WoodPeck" className="navbar-logo-img" />
           </a>
+
+          {/* Search Bar placed between Logo and Hamburger */}
+          <SearchBar />
 
           {/* Sidebar Trigger Button (Hamburger) - No border */}
           <button
