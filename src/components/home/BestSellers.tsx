@@ -24,7 +24,8 @@ export function BestSellers({ onAddToCart: _onAddToCart }: BestSellersProps) {
       slidesPerView: 2,
       spaceBetween: 10,
       loop: true,
-      grabCursor: true,
+      noSwiping: true,
+      noSwipingClass: 'swiper-no-swiping',
       autoplay: {
         delay: 3000,
         disableOnInteraction: false,
@@ -34,6 +35,28 @@ export function BestSellers({ onAddToCart: _onAddToCart }: BestSellersProps) {
         el: '.bestseller-swiper-pagination',
         clickable: true,
       },
+    })
+
+    swiperInstanceRef.current.on('click', (_swiper, event) => {
+      const target = event.target as HTMLElement
+      const imageBox = target.closest('.sig-card-image-box') as HTMLElement | null
+      if (imageBox) {
+        const track = imageBox.querySelector('.sig-card-image-track') as HTMLElement | null
+        const dots = imageBox.querySelectorAll('.sig-dot')
+        if (track) {
+          const currentIdx = imageBox.getAttribute('data-active-idx') === '1' ? 1 : 0
+          const nextIdx = currentIdx === 0 ? 1 : 0
+          imageBox.setAttribute('data-active-idx', String(nextIdx))
+          track.style.transform = nextIdx === 0 ? 'translateX(0%)' : 'translateX(-50%)'
+          dots.forEach((dot, dIdx) => {
+            if (dIdx === nextIdx) {
+              dot.classList.add('active')
+            } else {
+              dot.classList.remove('active')
+            }
+          })
+        }
+      }
     })
 
     return () => {

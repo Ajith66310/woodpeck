@@ -598,18 +598,17 @@ code {
   cursor: grabbing;
 }
 
-.hero-swiper-track {
+.hero-swiper-container .swiper-wrapper {
   display: flex;
   width: 100%;
   height: 100%;
   margin: 0;
   padding: 0;
-  transition: transform 0.45s cubic-bezier(0.22, 1, 0.36, 1);
-  will-change: transform;
+  box-sizing: border-box;
 }
 
 .hero-slide {
-  flex: 0 0 100%;
+  flex-shrink: 0;
   width: 100%;
   height: 100%;
   aspect-ratio: 1 / 1;
@@ -617,6 +616,7 @@ code {
   margin: 0;
   padding: 0;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
 .hero-slide-img {
@@ -822,30 +822,20 @@ code {
   border-radius: 0;
 }
 
-/* Horizontal scroll-snap image track */
-.sig-card-image-scroll {
+/* Smooth transform-based image track */
+.sig-card-image-track {
   display: flex;
-  width: 100%;
+  width: 200%;
   height: 100%;
-  overflow-x: scroll;
-  overflow-y: hidden;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  scrollbar-width: none;
-  -ms-overflow-style: none;
+  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
+  will-change: transform;
 }
 
-.sig-card-image-scroll::-webkit-scrollbar {
-  display: none;
-}
-
-/* Each slide takes exactly the full width of the track */
+/* Each slide takes exactly 50% of the 200% track */
 .sig-image-slide {
-  flex: 0 0 100%;
-  min-width: 100%;
-  width: 100%;
+  flex: 0 0 50%;
+  width: 50%;
   height: 100%;
-  scroll-snap-align: start;
   position: relative;
   overflow: hidden;
 }
@@ -2180,18 +2170,12 @@ code {
   aspect-ratio: 9 / 13.5;
   border-radius: 16px;
   overflow: hidden;
-  background: #0f172a;
+  background: transparent;
   box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
   border: 1px solid rgba(0, 0, 0, 0.06);
   cursor: pointer;
   user-select: none;
   -webkit-user-select: none;
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
-}
-
-.insta-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
 }
 
 .insta-card-img {
@@ -2200,11 +2184,6 @@ code {
   object-fit: cover;
   object-position: center;
   display: block;
-  transition: transform 0.5s ease;
-}
-
-.insta-card:hover .insta-card-img {
-  transform: scale(1.04);
 }
 
 .insta-card-gradient {

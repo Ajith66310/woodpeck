@@ -1,4 +1,9 @@
-import { useState, useEffect, useRef } from 'preact/hooks'
+import { useEffect, useRef } from 'preact/hooks'
+import Swiper from 'swiper'
+import { Autoplay } from 'swiper/modules'
+import 'swiper/css'
+import 'swiper/css/autoplay'
+
 import { BANNER_SLIDES } from '../../services/productData.ts'
 
 interface HeroBannerSwiperProps {
@@ -7,94 +12,36 @@ interface HeroBannerSwiperProps {
 }
 
 export function HeroBannerSwiper({ onExploreClick }: HeroBannerSwiperProps) {
-  const [currentIndex, setCurrentIndex] = useState(0)
-  const [isPaused, setIsPaused] = useState(false)
-  const timerRef = useRef<number | null>(null)
+  const swiperRef = useRef<HTMLDivElement | null>(null)
+  const swiperInstanceRef = useRef<Swiper | null>(null)
 
-  const touchStartX = useRef<number | null>(null)
-  const touchEndX = useRef<number | null>(null)
-  const isDragging = useRef<boolean>(false)
+  // Ensure enough slides for a continuous, seamless infinite loop without rewinding
+  const slides = BANNER_SLIDES.length < 4
+    ? [...BANNER_SLIDES, ...BANNER_SLIDES.map((s) => ({ ...s, id: `${s.id}-loop` }))]
+    : BANNER_SLIDES
 
-  const slidesCount = BANNER_SLIDES.length
-
-  const nextSlide = () => {
-    setCurrentIndex((prev) => (prev + 1) % slidesCount)
-  }
-
-  const prevSlide = () => {
-    setCurrentIndex((prev) => (prev - 1 + slidesCount) % slidesCount)
-  }
-
-  // Auto scroll effect
   useEffect(() => {
-    if (isPaused) return
+    if (!swiperRef.current) return
 
-    timerRef.current = window.setInterval(() => {
-      setCurrentIndex((prev) => (prev + 1) % slidesCount)
-    }, 4500)
+    swiperInstanceRef.current = new Swiper(swiperRef.current, {
+      modules: [Autoplay],
+      slidesPerView: 1,
+      loop: true,
+      grabCursor: true,
+      speed: 650,
+      autoplay: {
+        delay: 4000,
+        disableOnInteraction: false,
+        pauseOnMouseEnter: true,
+      },
+    })
 
     return () => {
-      if (timerRef.current) clearInterval(timerRef.current)
+      swiperInstanceRef.current?.destroy(true, true)
     }
-  }, [isPaused, slidesCount])
-
-  // Touch handlers for mobile swipe
-  const onTouchStart = (e: TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX
-    touchEndX.current = e.touches[0].clientX
-    setIsPaused(true)
-  }
-
-  const onTouchMove = (e: TouchEvent) => {
-    touchEndX.current = e.touches[0].clientX
-  }
-
-  const onTouchEnd = () => {
-    if (touchStartX.current !== null && touchEndX.current !== null) {
-      const diff = touchStartX.current - touchEndX.current
-      if (diff > 35) {
-        nextSlide()
-      } else if (diff < -35) {
-        prevSlide()
-      }
-    }
-    touchStartX.current = null
-    touchEndX.current = null
-    setTimeout(() => setIsPaused(false), 2500)
-  }
-
-  // Mouse drag handlers for desktop/devtools swipe
-  const onMouseDown = (e: MouseEvent) => {
-    isDragging.current = true
-    touchStartX.current = e.clientX
-    touchEndX.current = e.clientX
-    setIsPaused(true)
-  }
-
-  const onMouseMove = (e: MouseEvent) => {
-    if (!isDragging.current) return
-    touchEndX.current = e.clientX
-  }
-
-  const onMouseUp = () => {
-    if (isDragging.current && touchStartX.current !== null && touchEndX.current !== null) {
-      const diff = touchStartX.current - touchEndX.current
-      if (diff > 35) {
-        nextSlide()
-      } else if (diff < -35) {
-        prevSlide()
-      }
-    }
-    isDragging.current = false
-    touchStartX.current = null
-    touchEndX.current = null
-    setTimeout(() => setIsPaused(false), 2500)
-  }
+  }, [])
 
   const handleSlideClick = () => {
-    if (touchStartX.current !== null && touchEndX.current !== null && Math.abs(touchStartX.current - touchEndX.current) > 10) {
-      return
-    }
     if (onExploreClick) {
       onExploreClick()
     } else {
@@ -105,48 +52,30 @@ export function HeroBannerSwiper({ onExploreClick }: HeroBannerSwiperProps) {
 
   return (
     <div
-      className="hero-swiper-container"
-      onTouchStart={onTouchStart}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-      onMouseDown={onMouseDown}
-      onMouseMove={onMouseMove}
-      onMouseUp={onMouseUp}
-      onMouseLeave={() => {
-        if (isDragging.current) onMouseUp()
-        setIsPaused(false)
-      }}
+      ref={swiperRef}
+      className="swiper hero-swiper-container"
       aria-roledescription="carousel"
       aria-label="WoodPeck Artisan Showcase"
     >
-      <div
-        className="hero-swiper-track"
-        style={{
-          transform: `translateX(-${currentIndex * 100}%)`,
-        }}
-      >
-        {BANNER_SLIDES.map((slide, idx) => {
-          const isActive = idx === currentIndex
-          return (
-            <div
-              key={slide.id}
-              className={`hero-slide ${isActive ? 'active' : ''}`}
-              onClick={handleSlideClick}
-              role="button"
-              tabIndex={isActive ? 0 : -1}
-              aria-label={`View ${slide.title}`}
-              aria-hidden={!isActive}
-            >
-              <img
-                src={slide.image}
-                alt={`${slide.title} - ${slide.highlight}`}
-                className="hero-slide-img"
-                loading={idx === 0 ? 'eager' : 'lazy'}
-                draggable={false}
-              />
-            </div>
-          )
-        })}
+      <div className="swiper-wrapper">
+        {slides.map((slide, idx) => (
+          <div
+            key={slide.id}
+            className="swiper-slide hero-slide"
+            onClick={handleSlideClick}
+            role="button"
+            tabIndex={0}
+            aria-label={`View ${slide.title}`}
+          >
+            <img
+              src={slide.image}
+              alt={`${slide.title} - ${slide.highlight}`}
+              className="hero-slide-img"
+              loading={idx === 0 ? 'eager' : 'lazy'}
+              draggable={false}
+            />
+          </div>
+        ))}
       </div>
     </div>
   )

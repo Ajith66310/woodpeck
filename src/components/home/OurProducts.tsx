@@ -123,56 +123,146 @@ export const SIGNATURE_PRODUCTS: SignatureProduct[] = [
 
 export function SignatureCard({ product }: { product: SignatureProduct }) {
   const [activeIdx, setActiveIdx] = useState<number>(0);
-  const scrollRef = useRef<HTMLDivElement | null>(null);
 
-  const handleScroll = () => {
-    if (!scrollRef.current) return;
-    const { scrollLeft, clientWidth } = scrollRef.current;
-    if (clientWidth > 0) {
-      const idx = Math.round(scrollLeft / clientWidth);
-      if (idx !== activeIdx && idx >= 0 && idx < 2) {
-        setActiveIdx(idx);
+  const touchStartX = useRef<number | null>(null);
+  const touchEndX = useRef<number | null>(null);
+  const isTouchSwiping = useRef<boolean>(false);
+
+  const mouseStartX = useRef<number | null>(null);
+  const mouseEndX = useRef<number | null>(null);
+  const isMouseDragging = useRef<boolean>(false);
+
+  // Click or tap on image: toggle continuously between 1st image (0) and 2nd image (1)
+  const handleImageClick = (e: MouseEvent) => {
+    e.stopPropagation();
+    if (isTouchSwiping.current || isMouseDragging.current) return;
+    setActiveIdx((prev) => (prev === 0 ? 1 : 0));
+  };
+
+  // Touch swipe handlers on the image
+  const handleTouchStart = (e: TouchEvent) => {
+    touchStartX.current = e.touches[0].clientX;
+    touchEndX.current = e.touches[0].clientX;
+    isTouchSwiping.current = false;
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    touchEndX.current = e.touches[0].clientX;
+    if (touchStartX.current !== null && Math.abs(touchEndX.current - touchStartX.current) > 10) {
+      isTouchSwiping.current = true;
+    }
+  };
+
+  const handleTouchEnd = (e: TouchEvent) => {
+    if (touchStartX.current !== null && touchEndX.current !== null) {
+      const diff = touchStartX.current - touchEndX.current;
+      if (diff > 25) {
+        // Swiped left -> show second image (idx 1)
+        setActiveIdx(1);
+      } else if (diff < -25) {
+        // Swiped right -> show first image (idx 0)
+        setActiveIdx(0);
+      } else if (!isTouchSwiping.current) {
+        // Tap on image -> toggle continuously
+        setActiveIdx((prev) => (prev === 0 ? 1 : 0));
+      }
+    }
+    touchStartX.current = null;
+    touchEndX.current = null;
+    setTimeout(() => {
+      isTouchSwiping.current = false;
+    }, 50);
+  };
+
+  // Mouse swipe / drag handlers on the image
+  const handleMouseDown = (e: MouseEvent) => {
+    mouseStartX.current = e.clientX;
+    mouseEndX.current = e.clientX;
+    isMouseDragging.current = false;
+  };
+
+  const handleMouseMove = (e: MouseEvent) => {
+    if (mouseStartX.current !== null) {
+      mouseEndX.current = e.clientX;
+      if (Math.abs(mouseEndX.current - mouseStartX.current) > 10) {
+        isMouseDragging.current = true;
       }
     }
   };
 
-  const scrollToImage = (index: number) => {
-    if (!scrollRef.current) return;
-    scrollRef.current.scrollTo({
-      left: index * scrollRef.current.clientWidth,
-      behavior: "smooth",
-    });
-    setActiveIdx(index);
+  const handleMouseUp = (e: MouseEvent) => {
+    if (isMouseDragging.current && mouseStartX.current !== null && mouseEndX.current !== null) {
+      const diff = mouseStartX.current - mouseEndX.current;
+      if (diff > 25) {
+        setActiveIdx(1);
+      } else if (diff < -25) {
+        setActiveIdx(0);
+      }
+    } else if (mouseStartX.current !== null) {
+      // Click without dragging -> toggle continuously
+      setActiveIdx((prev) => (prev === 0 ? 1 : 0));
+    }
+    mouseStartX.current = null;
+    mouseEndX.current = null;
+    setTimeout(() => {
+      isMouseDragging.current = false;
+    }, 50);
   };
 
-  const waUrl = `https://wa.me/?text=${encodeURIComponent(product.whatsappText)}`;
+  const phoneNumber = "918590123072";
+  const waMessage = `Hello WoodPeck! 🪵
+I would like to inquire / order:
+
+*Product:* ${product.name}
+*Specifications:* ${product.tags.join(" | ")}
+*Details:* ${product.description}
+
+Please share pricing and availability. Thank you!`;
+
+  const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(waMessage)}`;
 
   return (
     <article className="sig-product-card">
-      <div className="sig-card-image-box">
-        {/* Horizontal scroll-snap track */}
+      <div
+        className="sig-card-image-box swiper-no-swiping"
+        onClick={handleImageClick}
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        role="button"
+        tabIndex={0}
+        aria-label={`Toggle image view for ${product.name}`}
+        data-active-idx={activeIdx}
+      >
+        {/* Transform-based track: completely reliable across all browsers & Swiper */}
         <div
-          ref={scrollRef}
-          className="sig-card-image-scroll"
-          onScroll={handleScroll}
+          className="sig-card-image-track"
+          style={{
+            transform: activeIdx === 0 ? 'translateX(0%)' : 'translateX(-50%)',
+          }}
         >
-          {/* Slide 1: Original light background image (shown by default) */}
+          {/* Slide 1: Original light background image */}
           <div className="sig-image-slide">
             <img
               src={product.image}
               alt={`${product.name} - detail view`}
               loading="eager"
               className="sig-card-img"
+              draggable={false}
             />
           </div>
 
-          {/* Slide 2: Green #055531 background image (swipe to reveal) */}
+          {/* Slide 2: Green #055531 background image */}
           <div className="sig-image-slide sig-slide-green-bg">
             <img
               src={product.greenImage}
               alt={`${product.name} - studio view`}
               loading="lazy"
               className="sig-card-img"
+              draggable={false}
             />
           </div>
         </div>
@@ -184,7 +274,10 @@ export function SignatureCard({ product }: { product: SignatureProduct }) {
               key={idx}
               type="button"
               className={`sig-dot ${activeIdx === idx ? "active" : ""}`}
-              onClick={() => scrollToImage(idx)}
+              onClick={(e) => {
+                e.stopPropagation();
+                setActiveIdx(idx);
+              }}
               aria-label={idx === 0 ? "Detail view" : "Studio view"}
             />
           ))}
@@ -209,8 +302,9 @@ export function SignatureCard({ product }: { product: SignatureProduct }) {
           href={waUrl}
           target="_blank"
           rel="noopener noreferrer"
-          className="sig-whatsapp-btn"
+          className="sig-whatsapp-btn swiper-no-swiping"
           aria-label={`Order ${product.name} on WhatsApp`}
+          onClick={(e) => e.stopPropagation()}
         >
           <svg
             className="sig-whatsapp-icon"
