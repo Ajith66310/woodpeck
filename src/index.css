@@ -2117,6 +2117,193 @@ code {
   height: 1px;
 }
 
+/* ==========================================================================
+   Instagram Reels / Moments That Matter Component
+   ========================================================================== */
+.instagram-feed-section {
+  width: 100%;
+  margin-top: 1rem;
+  margin-bottom: 3.5rem;
+  box-sizing: border-box;
+  position: relative;
+}
+
+.insta-header-wrap {
+  text-align: center;
+  margin-bottom: 1.25rem;
+}
+
+.insta-main-title {
+  font-family: var(--font-family-heading);
+  font-size: 1.35rem;
+  font-weight: 800;
+  letter-spacing: -0.01em;
+  color: #111827;
+  text-align: center;
+  margin: 0;
+  line-height: 1.2;
+}
+
+.insta-sub-title {
+  font-size: 0.85rem;
+  color: #4b5563;
+  text-align: center;
+  margin-top: 0.35rem;
+  font-weight: 500;
+  letter-spacing: 0.01em;
+}
+
+.insta-swiper-container {
+  position: relative;
+  width: calc(100% + 20px);
+  margin-left: -10px;
+  margin-right: -10px;
+  box-sizing: border-box;
+}
+
+.insta-swiper {
+  width: 100%;
+  overflow: hidden;
+  padding: 4px 10px;
+  box-sizing: border-box;
+}
+
+.insta-slide {
+  height: auto;
+  display: flex;
+  box-sizing: border-box;
+}
+
+.insta-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 9 / 13.5;
+  border-radius: 16px;
+  overflow: hidden;
+  background: #0f172a;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.12);
+  border: 1px solid rgba(0, 0, 0, 0.06);
+  cursor: pointer;
+  user-select: none;
+  -webkit-user-select: none;
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+}
+
+.insta-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.16);
+}
+
+.insta-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+  display: block;
+  transition: transform 0.5s ease;
+}
+
+.insta-card:hover .insta-card-img {
+  transform: scale(1.04);
+}
+
+.insta-card-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.72) 0%, rgba(0, 0, 0, 0.25) 35%, transparent 65%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+.insta-card-footer {
+  position: absolute;
+  bottom: 12px;
+  left: 12px;
+  right: 12px;
+  z-index: 4;
+}
+
+.insta-handle-text {
+  font-family: var(--font-family-heading);
+  font-size: 0.85rem;
+  font-weight: 800;
+  color: #ffffff;
+  letter-spacing: 0.01em;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.75);
+  display: inline-block;
+}
+
+/* Floating Navigation Buttons — Hidden during scroll, shown when touching section */
+.insta-swiper-btn {
+  position: absolute;
+  top: 50%;
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: #ffffff;
+  color: #111827;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.22);
+  cursor: pointer;
+  z-index: 20;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1), transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.insta-swiper-prev {
+  left: 2px;
+  transform: translateY(-50%) scale(0.9);
+}
+
+.insta-swiper-next {
+  right: 2px;
+  transform: translateY(-50%) scale(0.9);
+}
+
+/* Show buttons immediately when hovering over the section or container (no click needed) */
+.instagram-feed-section:hover:not(.is-scrolling) .insta-swiper-btn,
+.insta-swiper-container:hover:not(.is-scrolling) .insta-swiper-btn,
+.insta-swiper-btn.visible {
+  opacity: 1 !important;
+  pointer-events: auto !important;
+}
+
+.instagram-feed-section:hover:not(.is-scrolling) .insta-swiper-prev,
+.insta-swiper-container:hover:not(.is-scrolling) .insta-swiper-prev,
+.insta-swiper-prev.visible {
+  transform: translateY(-50%) scale(1) !important;
+}
+
+.instagram-feed-section:hover:not(.is-scrolling) .insta-swiper-next,
+.insta-swiper-container:hover:not(.is-scrolling) .insta-swiper-next,
+.insta-swiper-next.visible {
+  transform: translateY(-50%) scale(1) !important;
+}
+
+/* Force hidden while scrolling the page */
+.instagram-feed-section.is-scrolling .insta-swiper-btn {
+  opacity: 0 !important;
+  pointer-events: none !important;
+  transform: translateY(-50%) scale(0.9) !important;
+}
+
+.insta-swiper-btn:hover {
+  background: #ffffff;
+  box-shadow: 0 6px 24px rgba(0, 0, 0, 0.28);
+}
+
+.insta-swiper-btn:hover:not(.is-scrolling) {
+  transform: translateY(-50%) scale(1.08) !important;
+}
+
+.insta-swiper-btn:active {
+  transform: translateY(-50%) scale(0.94) !important;
+}
+
 /* By default on SM screens (<= 640px), blocked screen is hidden */
 .desktop-blocked-screen {
   display: none !important;

@@ -5,6 +5,7 @@ import { BestSellers } from '../components/home/BestSellers.tsx'
 import { OurProducts } from '../components/home/OurProducts.tsx'
 import { WhyChooseUs } from '../components/home/WhyChooseUs.tsx'
 import { TrustFeatures } from '../components/home/TrustFeatures.tsx'
+import { InstagramFeed } from '../components/home/InstagramFeed.tsx'
 import type { NavTab, Product } from '../types/index.ts'
 
 interface HomeProps {
@@ -60,14 +61,14 @@ export function Home({ onNavigate: _onNavigate }: HomeProps) {
         {/* 4. Our Signature Products */}
         <OurProducts onAddToCart={handleAddToCart} />
 
-        {/* 4. Why Choose WoodPeck */}
+        {/* 5. Trust Features */}
         <TrustFeatures />
         
-  {/* 5. Trust Features — Fast Shipping, Price-match, Hassle-free exchange, 5 Star Reviews */}
+        {/* 6. Why Choose WoodPeck */}
         <WhyChooseUs />
 
-
-      
+        {/* 7. Instagram Moments That Matter / Creator Faves */}
+        <InstagramFeed />
       </div>
     </div>
   )
