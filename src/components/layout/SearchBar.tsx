@@ -116,7 +116,7 @@ export function SearchBar() {
           className="search-text-input"
           aria-label="Search products"
           autoComplete="off"
-          spellCheck={false}
+          spellcheck={false}
         />
 
         {/* Right Clear 'x' Button */}

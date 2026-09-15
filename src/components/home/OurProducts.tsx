@@ -153,7 +153,7 @@ export function SignatureCard({ product }: { product: SignatureProduct }) {
     }
   };
 
-  const handleTouchEnd = (e: TouchEvent) => {
+  const handleTouchEnd = (_e: TouchEvent) => {
     if (touchStartX.current !== null && touchEndX.current !== null) {
       const diff = touchStartX.current - touchEndX.current;
       if (diff > 25) {
@@ -190,7 +190,7 @@ export function SignatureCard({ product }: { product: SignatureProduct }) {
     }
   };
 
-  const handleMouseUp = (e: MouseEvent) => {
+  const handleMouseUp = (_e: MouseEvent) => {
     if (isMouseDragging.current && mouseStartX.current !== null && mouseEndX.current !== null) {
       const diff = mouseStartX.current - mouseEndX.current;
       if (diff > 25) {
