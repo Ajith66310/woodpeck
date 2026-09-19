@@ -4,10 +4,32 @@ import { SearchBar } from './SearchBar.tsx'
 
 interface NavbarProps {
   onItemClick?: (index: number) => void
+  onNavigateHome?: () => void
+  onNavigateShop?: (categoryKey?: string) => void
 }
 
-export function Navbar({ onItemClick: _onItemClick }: NavbarProps) {
+export function Navbar({ onItemClick: _onItemClick, onNavigateHome, onNavigateShop }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false)
+  const [isShopOpen, setIsShopOpen] = useState(false)
+
+  const handleHomeClick = () => {
+    setIsOpen(false)
+    if (onNavigateHome) {
+      onNavigateHome()
+    } else {
+      window.scrollTo({ top: 0, behavior: 'smooth' })
+    }
+  }
+
+  const handleCategoryClick = (filterKey: string) => {
+    setIsOpen(false)
+    if (onNavigateShop) {
+      onNavigateShop(filterKey)
+    } else {
+      const el = document.getElementById('our-products-section')
+      el?.scrollIntoView({ behavior: 'smooth' })
+    }
+  }
 
   // Prevent background scroll when sidebar is open
   useEffect(() => {
@@ -37,7 +59,15 @@ export function Navbar({ onItemClick: _onItemClick }: NavbarProps) {
       <header className="navbar sm-navbar">
         <div className="navbar-container">
           {/* Logo Image in Navbar */}
-          <a href="#" className="navbar-brand" aria-label="WoodPeck Home">
+          <a
+            href="#"
+            className="navbar-brand"
+            aria-label="WoodPeck Home"
+            onClick={(e) => {
+              e.preventDefault()
+              handleHomeClick()
+            }}
+          >
             <img src={woodpeckLogo} alt="WoodPeck" className="navbar-logo-img" />
           </a>
 
@@ -66,7 +96,7 @@ export function Navbar({ onItemClick: _onItemClick }: NavbarProps) {
         aria-hidden="true"
       />
 
-      {/* Sidebar Drawer - Only close button remains, completely borderless */}
+      {/* Sidebar Drawer */}
       <aside
         className={`sidebar-drawer ${isOpen ? 'open' : ''}`}
         aria-label="Mobile Navigation Drawer"
@@ -97,6 +127,65 @@ export function Navbar({ onItemClick: _onItemClick }: NavbarProps) {
               <line x1="6" y1="6" x2="18" y2="18"></line>
             </svg>
           </button>
+        </div>
+
+        <div className="sidebar-nav-menu">
+          <button
+            type="button"
+            className="sidebar-nav-link"
+            onClick={handleHomeClick}
+          >
+            <span>Home</span>
+          </button>
+
+          <div className="sidebar-shop-accordion">
+            <button
+              type="button"
+              className={`sidebar-nav-link sidebar-shop-btn ${isShopOpen ? 'open' : ''}`}
+              onClick={() => setIsShopOpen(!isShopOpen)}
+            >
+              <span>Shop</span>
+              <svg
+                className={`shop-chevron-icon ${isShopOpen ? 'rotated' : ''}`}
+                viewBox="0 0 24 24"
+                width="18"
+                height="18"
+                fill="none"
+                stroke="currentColor"
+                strokeWidth="2"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+              >
+                <polyline points="6 9 12 15 18 9"></polyline>
+              </svg>
+            </button>
+
+            {isShopOpen && (
+              <div className="sidebar-sub-menu">
+                <button
+                  type="button"
+                  className="sidebar-sub-link"
+                  onClick={() => handleCategoryClick('furniture')}
+                >
+                  <span>Furniture</span>
+                </button>
+                <button
+                  type="button"
+                  className="sidebar-sub-link"
+                  onClick={() => handleCategoryClick('decor')}
+                >
+                  <span>Home Decor</span>
+                </button>
+                <button
+                  type="button"
+                  className="sidebar-sub-link"
+                  onClick={() => handleCategoryClick('kitchen')}
+                >
+                  <span>Kitchen & Utensils</span>
+                </button>
+              </div>
+            )}
+          </div>
         </div>
       </aside>
     </>

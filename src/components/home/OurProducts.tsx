@@ -23,6 +23,7 @@ import bowlImg2Green from "../../assets/products/bowl-2-green.png";
 export interface SignatureProduct {
   id: string;
   name: string;
+  category: 'furniture' | 'decor' | 'kitchen';
   tags: string[];
   greenImage: string;  // shown first (#055531 bg)
   image: string;       // shown second (original, swipe to reveal)
@@ -34,6 +35,7 @@ export const SIGNATURE_PRODUCTS: SignatureProduct[] = [
   {
     id: "sig-chair-1",
     name: "Nordic Solid Oak Chair",
+    category: "furniture",
     tags: ["Solid Oak", "Natural Oil Finish"],
     greenImage: chairImg1Green,
     image: chairImg1,
@@ -45,6 +47,7 @@ export const SIGNATURE_PRODUCTS: SignatureProduct[] = [
   {
     id: "sig-vase-1",
     name: "Sculptural Walnut Vase",
+    category: "decor",
     tags: ["Walnut Wood", "Beeswax Polish"],
     greenImage: vaseImg1Green,
     image: vaseImg1,
@@ -56,6 +59,7 @@ export const SIGNATURE_PRODUCTS: SignatureProduct[] = [
   {
     id: "sig-board-1",
     name: "Artisan Teak Cutting Board",
+    category: "kitchen",
     tags: ["Teak Wood", "Food-Safe Oil"],
     greenImage: boardImg1Green,
     image: boardImg1,
@@ -67,6 +71,7 @@ export const SIGNATURE_PRODUCTS: SignatureProduct[] = [
   {
     id: "sig-bowl-1",
     name: "Hand-Carved Hardwood Bowl",
+    category: "kitchen",
     tags: ["Acacia Wood", "Zero-Chem Wax"],
     greenImage: bowlImg1Green,
     image: bowlImg1,
@@ -78,6 +83,7 @@ export const SIGNATURE_PRODUCTS: SignatureProduct[] = [
   {
     id: "sig-chair-2",
     name: "Natural Ash Wood Chair",
+    category: "furniture",
     tags: ["Ash Wood", "Lye + Soap Paint"],
     greenImage: chairImg2Green,
     image: chairImg2,
@@ -89,6 +95,7 @@ export const SIGNATURE_PRODUCTS: SignatureProduct[] = [
   {
     id: "sig-vase-2",
     name: "Golden Teak Artisan Vessel",
+    category: "decor",
     tags: ["Plantation Teak", "Tung Oil Paint"],
     greenImage: vaseImg2Green,
     image: vaseImg2,
@@ -100,6 +107,7 @@ export const SIGNATURE_PRODUCTS: SignatureProduct[] = [
   {
     id: "sig-board-2",
     name: "Dark Walnut Chopping Block",
+    category: "kitchen",
     tags: ["Dark Walnut", "Ebony Stain"],
     greenImage: boardImg2Green,
     image: boardImg2,
@@ -111,6 +119,7 @@ export const SIGNATURE_PRODUCTS: SignatureProduct[] = [
   {
     id: "sig-bowl-2",
     name: "Deep Walnut Serving Bowl",
+    category: "kitchen",
     tags: ["Black Walnut", "Beeswax Seal"],
     greenImage: bowlImg2Green,
     image: bowlImg2,
@@ -324,9 +333,14 @@ Please share pricing and availability. Thank you!`;
 
 interface OurProductsProps {
   onAddToCart?: (product: any) => void;
+  selectedCategory?: string;
 }
 
-export function OurProducts({ onAddToCart: _onAddToCart }: OurProductsProps) {
+export function OurProducts({ onAddToCart: _onAddToCart, selectedCategory }: OurProductsProps) {
+  const filteredProducts = selectedCategory
+    ? SIGNATURE_PRODUCTS.filter((prod) => prod.category === selectedCategory)
+    : SIGNATURE_PRODUCTS;
+
   return (
     <section
       id="our-products-section"
@@ -335,12 +349,18 @@ export function OurProducts({ onAddToCart: _onAddToCart }: OurProductsProps) {
     >
       <div className="section-header-wrap">
         <h2 className="section-main-title" style={{ color: "#000000" }}>
-          Our Signature Products
+          {selectedCategory === 'furniture'
+            ? 'Furniture Details & Products'
+            : selectedCategory === 'decor'
+            ? 'Home Decor Details & Products'
+            : selectedCategory === 'kitchen'
+            ? 'Kitchen & Utensils Details & Products'
+            : 'Our Signature Products'}
         </h2>
       </div>
 
       <div className="signature-products-grid">
-        {SIGNATURE_PRODUCTS.map((prod) => (
+        {filteredProducts.map((prod) => (
           <SignatureCard key={prod.id} product={prod} />
         ))}
       </div>

@@ -12,19 +12,19 @@ export function CategoriesSection({ onSelectCategory }: CategoriesSectionProps) 
       id: 'furniture',
       name: 'Furniture',
       image: furnitureImg,
-      filterKey: 'tables',
+      filterKey: 'furniture',
     },
     {
       id: 'decor',
       name: 'Home Decor',
       image: decorImg,
-      filterKey: 'panels',
+      filterKey: 'decor',
     },
     {
       id: 'kitchen',
       name: 'Kitchen & Utensils',
       image: kitchenImg,
-      filterKey: 'kitchenware',
+      filterKey: 'kitchen',
     },
   ]
 
