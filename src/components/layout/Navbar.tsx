@@ -4,7 +4,7 @@ import { SearchBar } from './SearchBar.tsx'
 import { RiMenu3Line } from 'react-icons/ri'
 import { IoClose, IoChevronDown } from 'react-icons/io5'
 
-type ViewType = 'home' | 'shop' | 'about' | 'contact'
+type ViewType = 'home' | 'shop' | 'about' | 'contact' | 'product-detail'
 
 interface NavbarProps {
   currentView?: ViewType

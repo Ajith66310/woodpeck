@@ -639,6 +639,14 @@ code {
   gap: 8px;
 }
 
+.home-toolbar {
+  position: relative;
+  top: auto;
+  z-index: 20;
+  background: transparent;
+  padding: 4px 16px 16px;
+}
+
 .shop-toolbar-pill {
   display: inline-flex;
   align-items: center;
@@ -760,6 +768,80 @@ code {
     opacity: 1;
     transform: scale(1);
   }
+}
+
+/* ── Category DP Circles Strip ── */
+.shop-category-dp-strip {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-around;
+  padding: 10px 14px 6px;
+  background: #ffffff;
+  border-bottom: none;
+  max-width: 540px;
+  margin: 0 auto;
+  gap: 10px;
+}
+
+.shop-category-dp-btn {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: transparent;
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  outline: none;
+  flex: 1;
+  max-width: 80px;
+  text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.shop-category-dp-circle {
+  width: 58px;
+  height: 58px;
+  border-radius: 50%;
+  padding: 2.5px;
+  border: 2px solid #e2e8f0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f8fafc;
+  box-sizing: border-box;
+}
+
+.shop-category-dp-btn.active .shop-category-dp-circle {
+  border: 2.5px solid #055531;
+  box-shadow: 0 0 0 2.5px rgba(5, 85, 49, 0.2);
+  background: #ffffff;
+}
+
+.shop-category-dp-img {
+  width: 100%;
+  height: 100%;
+  border-radius: 50%;
+  object-fit: cover;
+  display: block;
+}
+
+.shop-category-dp-label {
+  font-family: var(--font-family-sans);
+  font-size: 11px;
+  font-weight: 500;
+  color: #475569;
+  text-align: center;
+  line-height: 1.25;
+  min-height: 28px;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.shop-category-dp-btn.active .shop-category-dp-label {
+  color: #055531;
+  font-weight: 700;
 }
 
 /* Results header */
@@ -1338,7 +1420,7 @@ code {
    2. Our Categories Component (#055531 Border & Bottom Strip)
    ========================================================================== */
 .categories-section {
-  margin-bottom: 1.5rem;
+  margin-bottom: 2.75rem;
   width: 100%;
   box-sizing: border-box;
 }
@@ -1372,9 +1454,17 @@ code {
   flex-direction: column;
   border: 1.5px solid #055531;
   background: #055531;
+  border-radius: 0;
   overflow: hidden;
   cursor: pointer;
   box-sizing: border-box;
+  box-shadow: none !important;
+  transition: none !important;
+  transform: none !important;
+}
+
+.category-card:hover {
+  transform: none !important;
   box-shadow: none !important;
 }
 
@@ -1397,12 +1487,18 @@ code {
   object-fit: cover;
   object-position: center;
   display: block;
+  transition: none !important;
+  transform: none !important;
+}
+
+.category-card:hover .category-card-img {
+  transform: none !important;
 }
 
 .category-bottom-bar {
   background: #055531;
   color: #ffffff;
-  padding: 0.42rem 0.15rem;
+  padding: 6px 4px;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -1410,17 +1506,20 @@ code {
   box-sizing: border-box;
   border: none;
   margin: 0;
+  min-height: 44px;
 }
 
 .category-name-text {
   font-family: var(--font-family-heading);
-  font-size: clamp(0.72rem, 3vw, 0.875rem);
+  font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.03em;
+  letter-spacing: 0.02em;
   text-transform: uppercase;
   color: #ffffff;
-  line-height: 1.2;
-  white-space: nowrap;
+  line-height: 1.25;
+  text-align: center;
+  white-space: normal;
+  display: block;
 }
 
 /* ==========================================================================
@@ -1796,6 +1895,7 @@ code {
    ========================================================================== */
 .best-sellers-section {
   width: 100%;
+  padding-top: 1.25rem;
   margin-bottom: 3.5rem;
   box-sizing: border-box;
 }
@@ -1805,7 +1905,7 @@ code {
   margin-left: -10px;
   margin-right: -10px;
   background-color: #ebebeb; /* Visibly darker neutral shade than #fafafa */
-  padding: 20px 10px 18px 10px;
+  padding: 26px 10px 18px 10px;
   border-radius: 14px;
   box-sizing: border-box;
 }
@@ -3255,5 +3355,289 @@ code {
   color: #334155;
   padding: 0.5rem 0;
   border-bottom: 1px solid #f1f5f9;
+}
+
+/* ==========================================================================
+   Product Detail Page (Clean Reference Style, No search btn, No WA bubble)
+   ========================================================================== */
+.product-detail-page {
+  width: 100%;
+  min-height: 100vh;
+  background: #ffffff;
+  padding-bottom: 2rem;
+  box-sizing: border-box;
+}
+
+.pdp-breadcrumb {
+  display: flex;
+  align-items: center;
+  font-size: 13px;
+  color: #64748b;
+  font-weight: 500;
+}
+
+.pdp-sep {
+  margin: 0 6px;
+  color: #cbd5e1;
+}
+
+.pdp-cat-link {
+  color: #055531;
+  font-weight: 600;
+}
+
+.pdp-content-wrap {
+  padding: 16px 16px 2rem 16px;
+  box-sizing: border-box;
+}
+
+/* Main Gallery Image Card */
+.pdp-main-image-card {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  background: #ffffff;
+  border: 1px solid #e2e8f0;
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.03);
+  touch-action: pan-y;
+}
+
+.pdp-main-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+  animation: pdpFade 0.22s ease-out;
+}
+
+@keyframes pdpFade {
+  from { opacity: 0.6; }
+  to   { opacity: 1; }
+}
+
+/* Navigation Chevrons on Main Image */
+.pdp-nav-chevron {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(4px);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  color: #1e293b;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+  transition: background 0.15s ease, transform 0.1s ease;
+}
+
+.pdp-nav-chevron:active {
+  transform: translateY(-50%) scale(0.92);
+}
+
+.pdp-nav-prev {
+  left: 10px;
+}
+
+.pdp-nav-next {
+  right: 10px;
+}
+
+/* Thumbnails Row (Clean, NO floating WhatsApp icon) */
+.pdp-thumbnails-row {
+  display: flex;
+  gap: 10px;
+  margin-top: 12px;
+  margin-bottom: 18px;
+}
+
+.pdp-thumb-card {
+  width: 64px;
+  height: 64px;
+  border-radius: 8px;
+  border: 1.5px solid #e2e8f0;
+  background: #ffffff;
+  overflow: hidden;
+  cursor: pointer;
+  padding: 0;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease;
+  flex-shrink: 0;
+}
+
+.pdp-thumb-card.active {
+  border: 2px solid #055531;
+  box-shadow: 0 0 0 1px #055531;
+}
+
+.pdp-thumb-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* Title & Share Row */
+.pdp-title-row {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 8px;
+}
+
+.pdp-product-title {
+  font-family: var(--font-family-heading);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: #0f172a;
+  line-height: 1.35;
+  margin: 0;
+}
+
+.pdp-share-btn {
+  background: transparent;
+  border: none;
+  padding: 6px;
+  cursor: pointer;
+  color: #e11d48;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 50%;
+  transition: transform 0.15s ease, background 0.15s ease;
+  flex-shrink: 0;
+}
+
+.pdp-share-btn:active {
+  transform: scale(0.9);
+  background: #ffe4e6;
+}
+
+.pdp-copied-toast {
+  background: #055531;
+  color: #ffffff;
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 6px;
+  margin-bottom: 12px;
+  animation: pdpFade 0.2s ease;
+}
+
+/* Tags Row */
+.pdp-tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-bottom: 18px;
+}
+
+.pdp-tag-capsule {
+  background: #f1f5f9;
+  color: #334155;
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 4px;
+}
+
+/* Sections: Description & Specs */
+.pdp-section {
+  margin-bottom: 18px;
+  border-top: 1px solid #f1f5f9;
+  padding-top: 14px;
+}
+
+.pdp-section-heading {
+  font-family: var(--font-family-heading);
+  font-size: 0.95rem;
+  font-weight: 700;
+  color: #0f172a;
+  margin: 0 0 8px 0;
+}
+
+.pdp-desc-text {
+  font-size: 0.9rem;
+  line-height: 1.6;
+  color: #475569;
+  margin: 0;
+}
+
+/* Specs Grid */
+.pdp-specs-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+}
+
+.pdp-spec-item {
+  background: #f8fafc;
+  border: 1px solid #f1f5f9;
+  padding: 8px 10px;
+  border-radius: 6px;
+}
+
+.pdp-spec-label {
+  display: block;
+  font-size: 11px;
+  color: #64748b;
+  text-transform: uppercase;
+  font-weight: 600;
+  letter-spacing: 0.03em;
+}
+
+.pdp-spec-val {
+  display: block;
+  font-size: 12.5px;
+  color: #0f172a;
+  font-weight: 600;
+  margin-top: 2px;
+}
+
+/* In-Page WhatsApp Button (Matches Card Color: #25D366) */
+.pdp-whatsapp-btn-wrap {
+  margin-top: 22px;
+  margin-bottom: 24px;
+}
+
+.pdp-whatsapp-btn {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  background: #25D366;
+  color: #ffffff;
+  padding: 11px 16px;
+  border-radius: 8px;
+  font-family: var(--font-family-sans);
+  font-size: 0.95rem;
+  font-weight: 700;
+  text-decoration: none;
+  box-sizing: border-box;
+  border: none;
+  box-shadow: 0 3px 10px rgba(37, 211, 102, 0.25);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.pdp-whatsapp-btn:hover {
+  background: #20ba5a;
+  color: #ffffff;
+}
+
+.pdp-whatsapp-btn:active {
+  transform: scale(0.98);
+  background: #1da851;
 }
 

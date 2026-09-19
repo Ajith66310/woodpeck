@@ -130,7 +130,13 @@ export const SIGNATURE_PRODUCTS: SignatureProduct[] = [
   },
 ];
 
-export function SignatureCard({ product }: { product: SignatureProduct }) {
+export function SignatureCard({
+  product,
+  onProductClick,
+}: {
+  product: SignatureProduct;
+  onProductClick?: (product: SignatureProduct) => void;
+}) {
   const [activeIdx, setActiveIdx] = useState<number>(0);
 
   const touchStartX = useRef<number | null>(null);
@@ -293,7 +299,11 @@ Please share pricing and availability. Thank you!`;
         </div>
       </div>
 
-      <div className="sig-card-content">
+      <div
+        className="sig-card-content"
+        onClick={() => onProductClick?.(product)}
+        style={{ cursor: onProductClick ? 'pointer' : 'default' }}
+      >
         {/* Square capsule badges: wood type + paint/finish */}
         <div className="sig-capsules-row">
           {product.tags.map((tag) => (
@@ -334,12 +344,29 @@ Please share pricing and availability. Thank you!`;
 interface OurProductsProps {
   onAddToCart?: (product: any) => void;
   selectedCategory?: string;
+  sortKey?: string;
+  onProductClick?: (product: SignatureProduct) => void;
 }
 
-export function OurProducts({ onAddToCart: _onAddToCart, selectedCategory }: OurProductsProps) {
-  const filteredProducts = selectedCategory
+function sortSignatureProducts(products: SignatureProduct[], sortKey?: string) {
+  const arr = [...products];
+  switch (sortKey) {
+    case 'name-az':
+      return arr.sort((a, b) => a.name.localeCompare(b.name));
+    case 'name-za':
+      return arr.sort((a, b) => b.name.localeCompare(a.name));
+    case 'category':
+      return arr.sort((a, b) => a.category.localeCompare(b.category));
+    default:
+      return arr;
+  }
+}
+
+export function OurProducts({ onAddToCart: _onAddToCart, selectedCategory, sortKey, onProductClick }: OurProductsProps) {
+  const filtered = selectedCategory
     ? SIGNATURE_PRODUCTS.filter((prod) => prod.category === selectedCategory)
     : SIGNATURE_PRODUCTS;
+  const filteredProducts = sortSignatureProducts(filtered, sortKey);
 
   return (
     <section
@@ -361,7 +388,7 @@ export function OurProducts({ onAddToCart: _onAddToCart, selectedCategory }: Our
 
       <div className="signature-products-grid">
         {filteredProducts.map((prod) => (
-          <SignatureCard key={prod.id} product={prod} />
+          <SignatureCard key={prod.id} product={prod} onProductClick={onProductClick} />
         ))}
       </div>
     </section>

@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'preact/hooks'
-import { SignatureCard, SIGNATURE_PRODUCTS } from '../components/home/OurProducts.tsx'
+import { SignatureCard, SIGNATURE_PRODUCTS, type SignatureProduct } from '../components/home/OurProducts.tsx'
 import { TbAdjustmentsHorizontal } from 'react-icons/tb'
 import { BsChevronDown } from 'react-icons/bs'
 
@@ -8,8 +8,14 @@ import bannerFurniture from '../assets/banner/banner-furniture.jpg'
 import bannerDecor from '../assets/banner/banner-decor.jpg'
 import bannerKitchen from '../assets/banner/banner-kitchen.jpg'
 
+import dpAll from '../assets/categories/all.jpg'
+import dpFurniture from '../assets/categories/furniture.jpg'
+import dpDecor from '../assets/categories/home-decor.jpg'
+import dpKitchen from '../assets/categories/kitchen-utensils.jpg'
+
 interface ShopPageProps {
   initialCategory?: string
+  onProductClick?: (product: SignatureProduct) => void
 }
 
 const CATEGORIES = [
@@ -17,6 +23,13 @@ const CATEGORIES = [
   { key: 'furniture', label: 'Furniture' },
   { key: 'decor', label: 'Home Decor' },
   { key: 'kitchen', label: 'Kitchen & Utensils' },
+]
+
+const CATEGORY_DPS = [
+  { key: '', label: 'All', image: dpAll, alt: 'All Products' },
+  { key: 'furniture', label: 'Furniture', image: dpFurniture, alt: 'Furniture' },
+  { key: 'decor', label: 'Home Decor', image: dpDecor, alt: 'Home Decor' },
+  { key: 'kitchen', label: 'Kitchen & Utensils', image: dpKitchen, alt: 'Kitchen & Utensils' },
 ]
 
 const CATEGORY_BANNERS: Record<string, { image: string; alt: string }> = {
@@ -59,7 +72,7 @@ function sortProducts(products: typeof SIGNATURE_PRODUCTS, sortKey: string) {
   }
 }
 
-export function ShopPage({ initialCategory }: ShopPageProps) {
+export function ShopPage({ initialCategory, onProductClick }: ShopPageProps) {
   const [selectedCategory, setSelectedCategory] = useState<string>(initialCategory ?? '')
   const [sortKey, setSortKey] = useState('featured')
   const [filterOpen, setFilterOpen] = useState(false)
@@ -100,7 +113,34 @@ export function ShopPage({ initialCategory }: ShopPageProps) {
         </div>
       )}
 
-      {/* ── Filter & Sort Toolbar ── */}
+      {/* ── Category DP Circles Strip ── */}
+      <div className="shop-category-dp-strip" role="tablist" aria-label="Product categories">
+        {CATEGORY_DPS.map((cat) => {
+          const isActive = selectedCategory === cat.key
+          return (
+            <button
+              key={cat.key}
+              type="button"
+              role="tab"
+              aria-selected={isActive}
+              className={`shop-category-dp-btn ${isActive ? 'active' : ''}`}
+              onClick={() => setSelectedCategory(cat.key)}
+            >
+              <div className="shop-category-dp-circle">
+                <img
+                  src={cat.image}
+                  alt={cat.alt}
+                  className="shop-category-dp-img"
+                  loading="lazy"
+                />
+              </div>
+              <span className="shop-category-dp-label">{cat.label}</span>
+            </button>
+          )
+        })}
+      </div>
+
+      {/* ── Filter & Sort Toolbar (under categories section) ── */}
       <div className="shop-toolbar">
         {/* Filter By pill — left */}
         <button
@@ -162,7 +202,7 @@ export function ShopPage({ initialCategory }: ShopPageProps) {
         {products.length > 0 ? (
           <div className="signature-products-grid">
             {products.map((prod) => (
-              <SignatureCard key={prod.id} product={prod} />
+              <SignatureCard key={prod.id} product={prod} onProductClick={onProductClick} />
             ))}
           </div>
         ) : (

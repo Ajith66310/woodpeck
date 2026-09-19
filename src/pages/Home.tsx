@@ -2,7 +2,7 @@ import { useState } from 'preact/hooks'
 import { HeroBannerSwiper } from '../components/home/HeroBannerSwiper.tsx'
 import { CategoriesSection } from '../components/home/CategoriesSection.tsx'
 import { BestSellers } from '../components/home/BestSellers.tsx'
-import { OurProducts } from '../components/home/OurProducts.tsx'
+import { OurProducts, type SignatureProduct } from '../components/home/OurProducts.tsx'
 import { WhyChooseUs } from '../components/home/WhyChooseUs.tsx'
 import { TrustFeatures } from '../components/home/TrustFeatures.tsx'
 import { InstagramFeed } from '../components/home/InstagramFeed.tsx'
@@ -10,9 +10,11 @@ import type { NavTab, Product } from '../types/index.ts'
 
 interface HomeProps {
   onNavigate?: (tab: NavTab) => void
+  onProductClick?: (product: SignatureProduct) => void
+  onNavigateShop?: (categoryKey?: string) => void
 }
 
-export function Home({ onNavigate: _onNavigate }: HomeProps) {
+export function Home({ onNavigate: _onNavigate, onProductClick, onNavigateShop }: HomeProps) {
   const [toastMessage, setToastMessage] = useState<string | null>(null)
   const [cartCount, setCartCount] = useState<number>(0)
 
@@ -53,13 +55,16 @@ export function Home({ onNavigate: _onNavigate }: HomeProps) {
 
       <div className="home-sections-wrap">
         {/* 2. Categories */}
-        <CategoriesSection />
-        
+        <CategoriesSection onSelectCategory={onNavigateShop} />
+
         {/* 3. Best Sellers */}
         <BestSellers onAddToCart={handleAddToCart} />
 
         {/* 4. Our Signature Products */}
-        <OurProducts onAddToCart={handleAddToCart} />
+        <OurProducts
+          onAddToCart={handleAddToCart}
+          onProductClick={onProductClick}
+        />
 
         {/* 5. Trust Features */}
         <TrustFeatures />

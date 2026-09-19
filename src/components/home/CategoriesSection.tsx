@@ -32,8 +32,6 @@ export function CategoriesSection({ onSelectCategory }: CategoriesSectionProps) 
     if (onSelectCategory) {
       onSelectCategory(filterKey)
     }
-    const el = document.getElementById('our-products-section')
-    el?.scrollIntoView({ behavior: 'smooth' })
   }
 
   return (
@@ -61,7 +59,13 @@ export function CategoriesSection({ onSelectCategory }: CategoriesSectionProps) 
               />
             </div>
             <div className="category-bottom-bar">
-              <span className="category-name-text">{cat.name}</span>
+              <span className="category-name-text">
+                {cat.id === 'kitchen' ? (
+                  <>Kitchen &amp;<br />Utensils</>
+                ) : (
+                  cat.name
+                )}
+              </span>
             </div>
           </div>
         ))}

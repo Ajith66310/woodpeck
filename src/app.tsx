@@ -6,12 +6,15 @@ import { Home } from './pages/Home.tsx'
 import { ShopPage } from './pages/Shop.tsx'
 import { AboutPage } from './pages/About.tsx'
 import { ContactPage } from './pages/Contact.tsx'
+import { ProductDetailPage } from './pages/ProductDetail.tsx'
+import type { SignatureProduct } from './components/home/OurProducts.tsx'
 
-type ViewType = 'home' | 'shop' | 'about' | 'contact'
+type ViewType = 'home' | 'shop' | 'about' | 'contact' | 'product-detail'
 
 export function App() {
   const [currentView, setCurrentView] = useState<ViewType>('home')
   const [shopCategory, setShopCategory] = useState<string | undefined>(undefined)
+  const [selectedProduct, setSelectedProduct] = useState<SignatureProduct | null>(null)
 
   const handleNavigateHome = () => {
     setCurrentView('home')
@@ -30,18 +33,30 @@ export function App() {
     window.scrollTo({ top: 0, behavior: 'smooth' })
   }
 
+  const handleProductClick = (product: SignatureProduct) => {
+    setSelectedProduct(product)
+    setCurrentView('product-detail')
+    window.scrollTo({ top: 0, behavior: 'smooth' })
+  }
+
   const renderPage = () => {
     switch (currentView) {
       case 'home':
-        return <Home />
+        return <Home onProductClick={handleProductClick} onNavigateShop={handleNavigateShop} />
       case 'shop':
-        return <ShopPage initialCategory={shopCategory} />
+        return <ShopPage initialCategory={shopCategory} onProductClick={handleProductClick} />
       case 'about':
         return <AboutPage />
       case 'contact':
         return <ContactPage />
+      case 'product-detail':
+        return selectedProduct ? (
+          <ProductDetailPage product={selectedProduct} />
+        ) : (
+          <ShopPage initialCategory={shopCategory} onProductClick={handleProductClick} />
+        )
       default:
-        return <Home />
+        return <Home onProductClick={handleProductClick} />
     }
   }
 
