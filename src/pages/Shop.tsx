@@ -83,7 +83,6 @@ export function ShopPage({ initialCategory }: ShopPageProps) {
   const products = sortProducts(filtered, sortKey)
 
   const activeCatLabel = CATEGORIES.find((c) => c.key === selectedCategory)?.label ?? 'All Products'
-  const activeSortLabel = SORT_OPTIONS.find((s) => s.key === sortKey)?.label ?? 'Featured'
   const currentBanner = CATEGORY_BANNERS[selectedCategory] ?? CATEGORY_BANNERS['']
 
   return (
