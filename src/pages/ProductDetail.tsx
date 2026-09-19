@@ -1,6 +1,6 @@
 import { useState, useRef } from 'preact/hooks'
 import type { SignatureProduct } from '../components/home/OurProducts.tsx'
-import { IoChevronBack, IoChevronForward, IoShareOutline, IoCheckmark } from 'react-icons/io5'
+import { IoChevronBack, IoChevronForward, IoShareOutline } from 'react-icons/io5'
 
 interface ProductDetailPageProps {
   product: SignatureProduct
@@ -14,7 +14,6 @@ const CATEGORY_NAMES: Record<string, string> = {
 
 export function ProductDetailPage({ product }: ProductDetailPageProps) {
   const [activeIdx, setActiveIdx] = useState<number>(0)
-  const [copied, setCopied] = useState<boolean>(false)
 
   const touchStartX = useRef<number | null>(null)
   const touchEndX = useRef<number | null>(null)
@@ -63,14 +62,10 @@ export function ProductDetailPage({ product }: ProductDetailPageProps) {
           text: `Check out the ${product.name} from WoodPeck: ${product.description}`,
           url: window.location.href,
         })
-        return
       } catch {
-        // Fallback to clipboard
+        // user cancelled or share failed - do not copy to clipboard
       }
     }
-    navigator.clipboard?.writeText(window.location.href)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
   }
 
   const phoneNumber = '918590123072'
@@ -137,11 +132,9 @@ export function ProductDetailPage({ product }: ProductDetailPageProps) {
             onClick={handleShare}
             aria-label="Share product"
           >
-            {copied ? <IoCheckmark size={20} color="#055531" /> : <IoShareOutline size={20} />}
+            <IoShareOutline size={20} />
           </button>
         </div>
-
-        {copied && <div className="pdp-copied-toast">Link copied to clipboard!</div>}
 
         {/* ── Tags / Capsules ── */}
         <div className="pdp-tags-row">

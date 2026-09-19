@@ -3,10 +3,7 @@ import { SignatureCard, SIGNATURE_PRODUCTS, type SignatureProduct } from '../com
 import { TbAdjustmentsHorizontal } from 'react-icons/tb'
 import { BsChevronDown } from 'react-icons/bs'
 
-import bannerAll from '../assets/banner/banner-all.jpg'
-import bannerFurniture from '../assets/banner/banner-furniture.jpg'
-import bannerDecor from '../assets/banner/banner-decor.jpg'
-import bannerKitchen from '../assets/banner/banner-kitchen.jpg'
+import bannerAll from '../assets/banner/banner-all.png'
 
 import dpAll from '../assets/categories/all.jpg'
 import dpFurniture from '../assets/categories/furniture.jpg'
@@ -38,16 +35,16 @@ const CATEGORY_BANNERS: Record<string, { image: string; alt: string }> = {
     alt: 'Shop Now - Everything You Love, All in One Place!',
   },
   furniture: {
-    image: bannerFurniture,
-    alt: 'Furniture - Timeless Comfort, Crafted in Solid Wood',
+    image: bannerAll,
+    alt: 'Shop Now - Everything You Love, All in One Place!',
   },
   decor: {
-    image: bannerDecor,
-    alt: 'Home Decor - Artisan Accents for Warm Living Spaces',
+    image: bannerAll,
+    alt: 'Shop Now - Everything You Love, All in One Place!',
   },
   kitchen: {
-    image: bannerKitchen,
-    alt: 'Kitchen & Utensils - Handcrafted Cutting Boards & Dining Essentials',
+    image: bannerAll,
+    alt: 'Shop Now - Everything You Love, All in One Place!',
   },
 }
 
