@@ -1986,7 +1986,7 @@ code {
   margin-right: -10px;
   background-color: #ebebeb; /* Visibly darker neutral shade than #fafafa */
   padding: 26px 10px 18px 10px;
-  border-radius: 14px;
+  border-radius: 5px;
   box-sizing: border-box;
 }
 
