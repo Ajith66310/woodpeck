@@ -58,7 +58,7 @@ export function Home({ onNavigate: _onNavigate, onProductClick, onNavigateShop }
         <CategoriesSection onSelectCategory={onNavigateShop} />
 
         {/* 3. Best Sellers */}
-        <BestSellers onAddToCart={handleAddToCart} />
+        <BestSellers onAddToCart={handleAddToCart} onProductClick={onProductClick} />
 
         {/* 4. Our Signature Products */}
         <OurProducts

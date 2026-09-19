@@ -1,9 +1,14 @@
-import { useState, useRef } from 'preact/hooks'
-import type { SignatureProduct } from '../components/home/OurProducts.tsx'
+import { useState, useRef, useEffect } from 'preact/hooks'
+import {
+  SignatureCard,
+  SIGNATURE_PRODUCTS,
+  type SignatureProduct,
+} from '../components/home/OurProducts.tsx'
 import { IoChevronBack, IoChevronForward, IoShareOutline } from 'react-icons/io5'
 
 interface ProductDetailPageProps {
   product: SignatureProduct
+  onProductClick?: (product: SignatureProduct) => void
 }
 
 const CATEGORY_NAMES: Record<string, string> = {
@@ -12,8 +17,13 @@ const CATEGORY_NAMES: Record<string, string> = {
   kitchen: 'Kitchen & Utensils',
 }
 
-export function ProductDetailPage({ product }: ProductDetailPageProps) {
+export function ProductDetailPage({ product, onProductClick }: ProductDetailPageProps) {
   const [activeIdx, setActiveIdx] = useState<number>(0)
+
+  // Reset active image index whenever the product changes
+  useEffect(() => {
+    setActiveIdx(0)
+  }, [product.id])
 
   const touchStartX = useRef<number | null>(null)
   const touchEndX = useRef<number | null>(null)
@@ -71,6 +81,11 @@ export function ProductDetailPage({ product }: ProductDetailPageProps) {
   const phoneNumber = '918590123072'
   const waMessage = `Hello WoodPeck! 🪵\nI would like to inquire / order:\n\n*Product:* ${product.name}\n*Category:* ${CATEGORY_NAMES[product.category] ?? product.category}\n*Tags:* ${product.tags.join(' | ')}\n*Details:* ${product.description}\n\nPlease share pricing and availability. Thank you!`
   const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(waMessage)}`
+
+  // Only show that category's related products (excluding current product)
+  const relatedProducts = SIGNATURE_PRODUCTS.filter(
+    (p) => p.id !== product.id && p.category === product.category
+  )
 
   return (
     <div className="page product-detail-page">
@@ -195,6 +210,22 @@ export function ProductDetailPage({ product }: ProductDetailPageProps) {
             <span>Order via WhatsApp</span>
           </a>
         </div>
+
+        {/* ── Related Products Section (Strictly This Category's Related Products) ── */}
+        {relatedProducts.length > 0 && (
+          <div className="pdp-related-section">
+            <h2 className="pdp-related-title">Related Products</h2>
+            <div className="signature-products-grid">
+              {relatedProducts.map((relProduct) => (
+                <SignatureCard
+                  key={relProduct.id}
+                  product={relProduct}
+                  onProductClick={onProductClick}
+                />
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     </div>
   )

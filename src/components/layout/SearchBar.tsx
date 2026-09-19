@@ -28,11 +28,49 @@ const ALL_SEARCH_PRODUCTS: SearchProductItem[] = [
   })),
 ]
 
-export function SearchBar() {
+import type { SignatureProduct } from '../home/OurProducts.tsx'
+
+interface SearchBarProps {
+  onProductClick?: (product: SignatureProduct) => void
+}
+
+export function SearchBar({ onProductClick }: SearchBarProps) {
   const [query, setQuery] = useState('')
   const [isOpen, setIsOpen] = useState(false)
   const containerRef = useRef<HTMLDivElement | null>(null)
   const inputRef = useRef<HTMLInputElement | null>(null)
+
+  const handleProductSelect = (item: SearchProductItem) => {
+    setIsOpen(false)
+    setQuery('')
+    if (onProductClick) {
+      const existingSig = SIGNATURE_PRODUCTS.find((p) => p.id === item.id)
+      if (existingSig) {
+        onProductClick(existingSig)
+      } else {
+        const catalogItem = PRODUCTS_CATALOG.find((p) => p.id === item.id)
+        const cat =
+          item.category === 'seating' || item.category === 'tables'
+            ? 'furniture'
+            : item.category === 'kitchenware'
+            ? 'kitchen'
+            : 'decor'
+        const customProduct: SignatureProduct = {
+          id: item.id,
+          name: item.name,
+          category: cat,
+          tags: item.subtitle ? item.subtitle.split(' • ') : ['Solid Hardwood', 'Artisan Studio'],
+          greenImage: item.image,
+          image: item.image,
+          description:
+            catalogItem?.description ||
+            `Handcrafted solid wood ${item.name} with natural timber grain and satin oil finish.`,
+          whatsappText: `Hi WoodPeck, I would like to inquire about the ${item.name}.`,
+        }
+        onProductClick(customProduct)
+      }
+    }
+  }
 
   // Filter products based on search query
   const trimmed = query.trim().toLowerCase()
@@ -161,10 +199,7 @@ export function SearchBar() {
                   className="search-result-row"
                   role="option"
                   tabIndex={0}
-                  onClick={() => {
-                    // Per user instructions: redirection in result later, only show result now
-                    setIsOpen(false)
-                  }}
+                  onClick={() => handleProductSelect(product)}
                 >
                   <div className="search-result-thumb-wrap">
                     <img

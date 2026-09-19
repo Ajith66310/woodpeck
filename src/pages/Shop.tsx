@@ -4,6 +4,9 @@ import { TbAdjustmentsHorizontal } from 'react-icons/tb'
 import { BsChevronDown } from 'react-icons/bs'
 
 import bannerAll from '../assets/banner/banner-all.png'
+import bannerFurniture from '../assets/banner/banner-furniture.jpg'
+import bannerDecor from '../assets/banner/banner-decor.jpg'
+import bannerKitchen from '../assets/banner/banner-kitchen.jpg'
 
 import dpAll from '../assets/categories/all.jpg'
 import dpFurniture from '../assets/categories/furniture.jpg'
@@ -35,16 +38,16 @@ const CATEGORY_BANNERS: Record<string, { image: string; alt: string }> = {
     alt: 'Shop Now - Everything You Love, All in One Place!',
   },
   furniture: {
-    image: bannerAll,
-    alt: 'Shop Now - Everything You Love, All in One Place!',
+    image: bannerFurniture,
+    alt: 'Furniture - Timeless Comfort, Crafted in Solid Wood',
   },
   decor: {
-    image: bannerAll,
-    alt: 'Shop Now - Everything You Love, All in One Place!',
+    image: bannerDecor,
+    alt: 'Home Decor - Sculptural Artisan Accents',
   },
   kitchen: {
-    image: bannerAll,
-    alt: 'Shop Now - Everything You Love, All in One Place!',
+    image: bannerKitchen,
+    alt: 'Kitchen & Utensils - Handcrafted Cutting Boards & Dining Essentials',
   },
 }
 

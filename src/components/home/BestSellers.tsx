@@ -5,14 +5,15 @@ import 'swiper/css'
 import 'swiper/css/pagination'
 import 'swiper/css/autoplay'
 
-import { SignatureCard, SIGNATURE_PRODUCTS } from './OurProducts.tsx'
+import { SignatureCard, SIGNATURE_PRODUCTS, type SignatureProduct } from './OurProducts.tsx'
 import type { Product } from '../../types/index.ts'
 
 interface BestSellersProps {
   onAddToCart?: (product: Product) => void
+  onProductClick?: (product: SignatureProduct) => void
 }
 
-export function BestSellers({ onAddToCart: _onAddToCart }: BestSellersProps) {
+export function BestSellers({ onAddToCart: _onAddToCart, onProductClick }: BestSellersProps) {
   const swiperRef = useRef<HTMLDivElement | null>(null)
   const swiperInstanceRef = useRef<Swiper | null>(null)
 
@@ -84,7 +85,7 @@ export function BestSellers({ onAddToCart: _onAddToCart }: BestSellersProps) {
             <div className="swiper-wrapper">
               {SIGNATURE_PRODUCTS.map((prod) => (
                 <div key={prod.id} className="swiper-slide">
-                  <SignatureCard product={prod} />
+                  <SignatureCard product={prod} onProductClick={onProductClick} />
                 </div>
               ))}
             </div>

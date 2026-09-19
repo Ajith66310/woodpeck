@@ -507,11 +507,12 @@ code {
 }
 
 .sidebar-nav-menu {
-  padding: 0.5rem 0 2rem;
+  padding: 0.5rem 0 1rem;
   display: flex;
   flex-direction: column;
   gap: 0;
   overflow-y: auto;
+  flex: 1;
 }
 
 .sidebar-nav-link {
@@ -519,42 +520,53 @@ code {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0.55rem 1.5rem;
-  background: transparent;
-  border: none;
-  box-shadow: none;
+  padding: 0.65rem 1.5rem;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   border-radius: 0;
   font-size: 18px;
   font-weight: 500;
   color: #0f172a;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: color 0.15s ease;
   text-align: left;
   box-sizing: border-box;
 }
 
 .sidebar-nav-link:hover {
-  background: #f1f5f9;
-  color: #0f172a;
-  border: none;
-  box-shadow: none;
+  background: transparent !important;
+  color: #055531;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.sidebar-nav-link:active {
+  background: transparent !important;
+  color: #055531;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .sidebar-nav-link.open {
-  background: #f1f5f9;
-  color: #0f172a;
-  border: none;
-  box-shadow: none;
+  background: transparent !important;
+  color: #055531;
+  font-weight: 600;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .sidebar-nav-link.active {
-  background: #f1f5f9;
-  color: #0f172a;
-  font-weight: 600;
+  background: transparent !important;
+  color: #055531;
+  font-weight: 700;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .sidebar-nav-link.active:hover {
-  background: #e8edf3;
+  background: transparent !important;
+  color: #055531;
 }
 
 .shop-chevron-icon {
@@ -574,9 +586,10 @@ code {
 .sidebar-sub-menu {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  gap: 2px;
   padding-left: 0;
   margin-top: 0;
+  background: transparent !important;
   animation: fadeInDown 0.2s ease forwards;
 }
 
@@ -596,25 +609,79 @@ code {
   display: flex;
   align-items: center;
   padding: 0.45rem 1.5rem 0.45rem 2.5rem;
-  background: transparent;
-  border: none;
-  box-shadow: none;
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
   border-radius: 0;
-  font-size: 17px;
+  font-size: 16px;
   font-weight: 400;
-  color: #334155;
+  color: #475569;
   cursor: pointer;
-  transition: background 0.15s ease;
+  transition: color 0.15s ease;
   text-align: left;
   box-sizing: border-box;
 }
 
 .sidebar-sub-link:hover {
-  background: #f1f5f9;
-  color: #0f172a;
-  border: none;
-  box-shadow: none;
+  background: transparent !important;
+  color: #055531;
+  border: none !important;
+  box-shadow: none !important;
   transform: none;
+}
+
+.sidebar-sub-link:active {
+  background: transparent !important;
+  color: #055531;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.sidebar-sub-link.active {
+  background: transparent !important;
+  color: #055531;
+  font-weight: 700;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+/* Sidebar Bottom WhatsApp Action (NO top border line, clean transparent container) */
+.sidebar-bottom-whatsapp {
+  padding: 1rem 1.25rem 1.5rem;
+  border: none !important;
+  border-top: none !important;
+  background: transparent !important;
+  margin-top: auto;
+  box-sizing: border-box;
+}
+
+.sidebar-whatsapp-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  width: 100%;
+  padding: 12px 18px;
+  background: #25D366;
+  color: #ffffff;
+  font-family: inherit;
+  font-size: 0.95rem;
+  font-weight: 700;
+  border-radius: 8px;
+  text-decoration: none;
+  box-sizing: border-box;
+  box-shadow: 0 4px 14px rgba(37, 211, 102, 0.3);
+  transition: background-color 0.2s ease, transform 0.1s ease;
+}
+
+.sidebar-whatsapp-btn:hover {
+  background: #20ba5a;
+  color: #ffffff;
+}
+
+.sidebar-whatsapp-btn:active {
+  transform: scale(0.98);
+  background: #1da851;
 }
 
 /* ==========================================================================
@@ -1359,19 +1426,19 @@ code {
 }
 
 /* ==========================================================================
-   1. Hero Banner Swiper (Full-width, zero top gap, zero border-radius, user swipe)
+   1. Hero Banner Swiper (10px gap around, border-radius: 5px, full proper image)
    ========================================================================== */
 .hero-swiper-container {
   position: relative;
-  width: 100%;
-  max-width: 100%;
+  width: calc(100% - 20px);
+  max-width: 440px;
   aspect-ratio: 1 / 1;
   overflow: hidden;
-  margin: 0;
+  margin: 10px auto;
   padding: 0;
   border: none;
-  border-radius: 0 !important;
-  background: #f7f3ee;
+  border-radius: 5px !important;
+  background: #203824;
   box-sizing: border-box;
   touch-action: pan-y;
   cursor: grab;
@@ -1402,6 +1469,7 @@ code {
   padding: 0;
   overflow: hidden;
   box-sizing: border-box;
+  border-radius: 5px;
 }
 
 .hero-slide-img {
@@ -1414,6 +1482,7 @@ code {
   user-select: none;
   -webkit-user-drag: none;
   pointer-events: none;
+  border-radius: 5px;
 }
 
 /* ==========================================================================
@@ -1426,19 +1495,19 @@ code {
 }
 
 .categories-header {
-  text-align: center;
-  margin-bottom: 1.25rem;
+  text-align: left;
+  margin-bottom: 0.65rem;
 }
 
 .categories-main-title {
   font-family: var(--font-family-heading);
-  font-size: 1.3rem;
-  font-weight: 800;
-  letter-spacing: 0.05em;
-  text-transform: uppercase;
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
   color: #000000 !important;
-  text-align: center;
-  line-height: 1.2;
+  text-align: left;
+  line-height: 1.25;
+  margin: 0;
 }
 
 .categories-grid {
@@ -3641,3 +3710,21 @@ code {
   background: #1da851;
 }
 
+/* ── Related Products Section in PDP ── */
+.pdp-related-section {
+  margin-top: 2rem;
+  padding-top: 1.5rem;
+  border-top: 1px solid #f1f5f9;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.pdp-related-title {
+  font-family: var(--font-family-heading);
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #0f172a;
+  text-align: center;
+  margin: 0 0 1.25rem 0;
+  letter-spacing: -0.01em;
+}
