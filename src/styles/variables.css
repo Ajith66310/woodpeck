@@ -4,11 +4,11 @@
   --hue-accent: 160;
 
   /* Fonts */
-  --font-inter: 'Inter', sans-serif;
-  --font-poppins: 'Poppins', sans-serif;
-  --font-family-sans: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-family-heading: 'Poppins', 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --font-family-global: 'Inter', 'Poppins', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-inter: 'Manrope', 'Inter', Arial, sans-serif;
+  --font-poppins: 'Manrope', 'Inter', Arial, sans-serif;
+  --font-family-sans: 'Manrope', 'Inter', Arial, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family-heading: 'Manrope', 'Inter', Arial, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-family-global: 'Manrope', 'Inter', Arial, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-family-mono: 'JetBrains Mono', monospace;
 
   /* Clean Pure White Theme Tokens */
