@@ -1,3 +1,4 @@
+
 import { useState, useRef } from "preact/hooks";
 
 // Original product images (light background)
@@ -10,7 +11,7 @@ import vaseImg2 from "../../assets/products/vase-2.jpg";
 import boardImg2 from "../../assets/products/board-2.jpg";
 import bowlImg2 from "../../assets/products/bowl-2.jpg";
 
-// Green background product images (#055531)
+// Green background product images (#055531 bg)
 import chairImg1Green from "../../assets/products/chair-1-green.png";
 import vaseImg1Green from "../../assets/products/vase-1-green.png";
 import boardImg1Green from "../../assets/products/board-1-green.png";
@@ -138,90 +139,60 @@ export function SignatureCard({
   onProductClick?: (product: SignatureProduct) => void;
 }) {
   const [activeIdx, setActiveIdx] = useState<number>(0);
+  const scrollRef = useRef<HTMLDivElement | null>(null);
+  const isMouseDown = useRef<boolean>(false);
+  const mouseStartX = useRef<number>(0);
+  const mouseScrollLeft = useRef<number>(0);
+  const hasMouseDragged = useRef<boolean>(false);
 
-  const touchStartX = useRef<number | null>(null);
-  const touchEndX = useRef<number | null>(null);
-  const isTouchSwiping = useRef<boolean>(false);
-
-  const mouseStartX = useRef<number | null>(null);
-  const mouseEndX = useRef<number | null>(null);
-  const isMouseDragging = useRef<boolean>(false);
-
-  // Click or tap on image: toggle continuously between 1st image (0) and 2nd image (1)
-  const handleImageClick = (e: MouseEvent) => {
-    e.stopPropagation();
-    if (isTouchSwiping.current || isMouseDragging.current) return;
-    setActiveIdx((prev) => (prev === 0 ? 1 : 0));
-  };
-
-  // Touch swipe handlers on the image
-  const handleTouchStart = (e: TouchEvent) => {
-    touchStartX.current = e.touches[0].clientX;
-    touchEndX.current = e.touches[0].clientX;
-    isTouchSwiping.current = false;
-  };
-
-  const handleTouchMove = (e: TouchEvent) => {
-    touchEndX.current = e.touches[0].clientX;
-    if (touchStartX.current !== null && Math.abs(touchEndX.current - touchStartX.current) > 10) {
-      isTouchSwiping.current = true;
-    }
-  };
-
-  const handleTouchEnd = (_e: TouchEvent) => {
-    if (touchStartX.current !== null && touchEndX.current !== null) {
-      const diff = touchStartX.current - touchEndX.current;
-      if (diff > 25) {
-        // Swiped left -> show second image (idx 1)
-        setActiveIdx(1);
-      } else if (diff < -25) {
-        // Swiped right -> show first image (idx 0)
-        setActiveIdx(0);
-      } else if (!isTouchSwiping.current) {
-        // Tap on image -> toggle continuously
-        setActiveIdx((prev) => (prev === 0 ? 1 : 0));
+  const handleScroll = () => {
+    if (!scrollRef.current) return;
+    const scrollLeft = scrollRef.current.scrollLeft;
+    const width = scrollRef.current.clientWidth;
+    if (width > 0) {
+      const newIdx = Math.round(scrollLeft / width);
+      if (newIdx !== activeIdx) {
+        setActiveIdx(newIdx);
       }
     }
-    touchStartX.current = null;
-    touchEndX.current = null;
-    setTimeout(() => {
-      isTouchSwiping.current = false;
-    }, 50);
   };
 
-  // Mouse swipe / drag handlers on the image
+  const scrollToIndex = (idx: number) => {
+    if (!scrollRef.current) return;
+    const width = scrollRef.current.clientWidth;
+    scrollRef.current.scrollTo({
+      left: idx * width,
+      behavior: "smooth",
+    });
+    setActiveIdx(idx);
+  };
+
   const handleMouseDown = (e: MouseEvent) => {
-    mouseStartX.current = e.clientX;
-    mouseEndX.current = e.clientX;
-    isMouseDragging.current = false;
+    if (!scrollRef.current) return;
+    isMouseDown.current = true;
+    hasMouseDragged.current = false;
+    mouseStartX.current = e.pageX - scrollRef.current.offsetLeft;
+    mouseScrollLeft.current = scrollRef.current.scrollLeft;
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (mouseStartX.current !== null) {
-      mouseEndX.current = e.clientX;
-      if (Math.abs(mouseEndX.current - mouseStartX.current) > 10) {
-        isMouseDragging.current = true;
-      }
+    if (!isMouseDown.current || !scrollRef.current) return;
+    const x = e.pageX - scrollRef.current.offsetLeft;
+    const walk = x - mouseStartX.current;
+    if (Math.abs(walk) > 6) {
+      hasMouseDragged.current = true;
+      scrollRef.current.scrollLeft = mouseScrollLeft.current - walk;
     }
   };
 
-  const handleMouseUp = (_e: MouseEvent) => {
-    if (isMouseDragging.current && mouseStartX.current !== null && mouseEndX.current !== null) {
-      const diff = mouseStartX.current - mouseEndX.current;
-      if (diff > 25) {
-        setActiveIdx(1);
-      } else if (diff < -25) {
-        setActiveIdx(0);
-      }
-    } else if (mouseStartX.current !== null) {
-      // Click without dragging -> toggle continuously
-      setActiveIdx((prev) => (prev === 0 ? 1 : 0));
+  const handleMouseUp = () => {
+    if (!isMouseDown.current || !scrollRef.current) return;
+    isMouseDown.current = false;
+    if (hasMouseDragged.current) {
+      const width = scrollRef.current.clientWidth;
+      const newIdx = Math.round(scrollRef.current.scrollLeft / width);
+      scrollRef.current.scrollTo({ left: newIdx * width, behavior: "smooth" });
     }
-    mouseStartX.current = null;
-    mouseEndX.current = null;
-    setTimeout(() => {
-      isMouseDragging.current = false;
-    }, 50);
   };
 
   const phoneNumber = "918590123072";
@@ -237,40 +208,51 @@ Please share pricing and availability. Thank you!`;
   const waUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(waMessage)}`;
 
   return (
-    <article className="sig-product-card">
-      <div
-        className="sig-card-image-box swiper-no-swiping"
-        onClick={handleImageClick}
-        onTouchStart={handleTouchStart}
-        onTouchMove={handleTouchMove}
-        onTouchEnd={handleTouchEnd}
-        onMouseDown={handleMouseDown}
-        onMouseMove={handleMouseMove}
-        onMouseUp={handleMouseUp}
-        role="button"
-        tabIndex={0}
-        aria-label={`Toggle image view for ${product.name}`}
-        data-active-idx={activeIdx}
-      >
-        {/* Transform-based track: completely reliable across all browsers & Swiper */}
+    <article
+      className="sig-product-card"
+      data-product-id={product.id}
+      onClick={() => {
+        if (hasMouseDragged.current) {
+          hasMouseDragged.current = false;
+          return;
+        }
+        onProductClick?.(product);
+      }}
+      role="button"
+      tabIndex={0}
+      aria-label={`View details for ${product.name}`}
+      style={{ cursor: onProductClick ? 'pointer' : 'default' }}
+      onKeyDown={(e) => {
+        if (e.key === 'Enter' || e.key === ' ') {
+          e.preventDefault();
+          onProductClick?.(product);
+        }
+      }}
+    >
+      <div className="sig-card-image-wrap">
         <div
-          className="sig-card-image-track"
-          style={{
-            transform: activeIdx === 0 ? 'translateX(0%)' : 'translateX(-50%)',
+          ref={scrollRef}
+          className="sig-card-image-box swiper-no-swiping"
+          onScroll={handleScroll}
+          onMouseDown={handleMouseDown}
+          onMouseMove={handleMouseMove}
+          onMouseUp={handleMouseUp}
+          onMouseLeave={() => {
+            if (isMouseDown.current) handleMouseUp();
           }}
         >
           {/* Slide 1: Original light background image */}
           <div className="sig-image-slide">
             <img
               src={product.image}
-              alt={`${product.name} - detail view`}
-              loading="eager"
+              alt={`${product.name} - natural view`}
+              loading="lazy"
               className="sig-card-img"
               draggable={false}
             />
           </div>
 
-          {/* Slide 2: Green #055531 background image */}
+          {/* Slide 2: Green studio view (#055531 bg) */}
           <div className="sig-image-slide sig-slide-green-bg">
             <img
               src={product.greenImage}
@@ -282,7 +264,7 @@ Please share pricing and availability. Thank you!`;
           </div>
         </div>
 
-        {/* Dot indicators */}
+        {/* Static Dot indicators overlay */}
         <div className="sig-image-dots">
           {[0, 1].map((idx) => (
             <button
@@ -291,19 +273,15 @@ Please share pricing and availability. Thank you!`;
               className={`sig-dot ${activeIdx === idx ? "active" : ""}`}
               onClick={(e) => {
                 e.stopPropagation();
-                setActiveIdx(idx);
+                scrollToIndex(idx);
               }}
-              aria-label={idx === 0 ? "Detail view" : "Studio view"}
+              aria-label={`View image ${idx + 1}`}
             />
           ))}
         </div>
       </div>
 
-      <div
-        className="sig-card-content"
-        onClick={() => onProductClick?.(product)}
-        style={{ cursor: onProductClick ? 'pointer' : 'default' }}
-      >
+      <div className="sig-card-content">
         {/* Square capsule badges: wood type + paint/finish */}
         <div className="sig-capsules-row">
           {product.tags.map((tag) => (
@@ -323,7 +301,9 @@ Please share pricing and availability. Thank you!`;
           rel="noopener noreferrer"
           className="sig-whatsapp-btn swiper-no-swiping"
           aria-label={`Order ${product.name} on WhatsApp`}
-          onClick={(e) => e.stopPropagation()}
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
         >
           <svg
             className="sig-whatsapp-icon"

@@ -1679,9 +1679,15 @@ code {
   box-sizing: border-box;
   border: 1px solid #e8edf2;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.07);
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
-.sig-card-image-box {
+.sig-product-card:active {
+  transform: scale(0.985);
+}
+
+.sig-card-image-wrap {
   position: relative;
   width: 100%;
   aspect-ratio: 3 / 4;
@@ -1693,35 +1699,37 @@ code {
   border-radius: 0;
 }
 
-/* Smooth transform-based image track */
-.sig-card-image-track {
-  display: flex;
-  width: 200%;
+.sig-card-image-box {
+  position: relative;
+  width: 100%;
   height: 100%;
-  transition: transform 0.35s cubic-bezier(0.25, 1, 0.5, 1);
-  will-change: transform;
+  overflow-x: auto;
+  overflow-y: hidden;
+  display: flex;
+  scroll-snap-type: x mandatory;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: none;
+  border-radius: 0;
+  cursor: pointer;
 }
 
-/* Each slide takes exactly 50% of the 200% track */
+.sig-card-image-box::-webkit-scrollbar {
+  display: none;
+}
+
 .sig-image-slide {
-  flex: 0 0 50%;
-  width: 50%;
+  flex: 0 0 100%;
+  width: 100%;
   height: 100%;
+  scroll-snap-align: start;
+  scroll-snap-stop: always;
   position: relative;
   overflow: hidden;
+  box-sizing: border-box;
 }
 
-/* Slide with green #055531 background */
 .sig-slide-green-bg {
   background-color: #055531;
-}
-
-/* Image with contain fit (for green slide) */
-.sig-img-contain {
-  object-fit: contain !important;
-  padding: 10%;
-  background: #055531;
-  box-sizing: border-box;
 }
 
 .sig-card-img {
@@ -1730,7 +1738,9 @@ code {
   object-fit: cover;
   object-position: center;
   display: block;
-  transition: opacity 0.25s ease-in-out;
+  user-select: none;
+  -webkit-user-drag: none;
+  pointer-events: none;
 }
 
 /* Image indicator dots */
@@ -1747,7 +1757,8 @@ code {
   border-radius: 10px;
   backdrop-filter: blur(4px);
   -webkit-backdrop-filter: blur(4px);
-  z-index: 2;
+  z-index: 5;
+  pointer-events: auto;
 }
 
 .sig-dot {

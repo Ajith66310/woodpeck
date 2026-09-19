@@ -16,6 +16,11 @@ interface BestSellersProps {
 export function BestSellers({ onAddToCart: _onAddToCart, onProductClick }: BestSellersProps) {
   const swiperRef = useRef<HTMLDivElement | null>(null)
   const swiperInstanceRef = useRef<Swiper | null>(null)
+  const onProductClickRef = useRef(onProductClick)
+
+  useEffect(() => {
+    onProductClickRef.current = onProductClick
+  }, [onProductClick])
 
   useEffect(() => {
     if (!swiperRef.current) return
@@ -40,22 +45,15 @@ export function BestSellers({ onAddToCart: _onAddToCart, onProductClick }: BestS
 
     swiperInstanceRef.current.on('click', (_swiper, event) => {
       const target = event.target as HTMLElement
-      const imageBox = target.closest('.sig-card-image-box') as HTMLElement | null
-      if (imageBox) {
-        const track = imageBox.querySelector('.sig-card-image-track') as HTMLElement | null
-        const dots = imageBox.querySelectorAll('.sig-dot')
-        if (track) {
-          const currentIdx = imageBox.getAttribute('data-active-idx') === '1' ? 1 : 0
-          const nextIdx = currentIdx === 0 ? 1 : 0
-          imageBox.setAttribute('data-active-idx', String(nextIdx))
-          track.style.transform = nextIdx === 0 ? 'translateX(0%)' : 'translateX(-50%)'
-          dots.forEach((dot, dIdx) => {
-            if (dIdx === nextIdx) {
-              dot.classList.add('active')
-            } else {
-              dot.classList.remove('active')
-            }
-          })
+      // If clicked on WhatsApp button, do not navigate to product detail
+      if (target.closest('.sig-whatsapp-btn')) return
+
+      const card = target.closest('.sig-product-card') as HTMLElement | null
+      if (card) {
+        const prodId = card.getAttribute('data-product-id')
+        const found = SIGNATURE_PRODUCTS.find((p) => p.id === prodId)
+        if (found && onProductClickRef.current) {
+          onProductClickRef.current(found)
         }
       }
     })
