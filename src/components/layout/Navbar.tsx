@@ -23,6 +23,16 @@ export function Navbar({
 }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [isShopOpen, setIsShopOpen] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setIsScrolled(window.scrollY > 4);
+    };
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    handleScroll();
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
 
   const handleHomeClick = () => {
     setIsOpen(false);
@@ -71,7 +81,7 @@ export function Navbar({
 
   return (
     <>
-      <header className="navbar sm-navbar">
+      <header className={`navbar sm-navbar ${isScrolled ? "scrolled" : ""}`}>
         <div className="navbar-container">
           {/* Logo */}
           <a

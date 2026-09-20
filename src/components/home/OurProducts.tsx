@@ -139,60 +139,88 @@ export function SignatureCard({
   onProductClick?: (product: SignatureProduct) => void;
 }) {
   const [activeIdx, setActiveIdx] = useState<number>(0);
-  const scrollRef = useRef<HTMLDivElement | null>(null);
-  const isMouseDown = useRef<boolean>(false);
-  const mouseStartX = useRef<number>(0);
-  const mouseScrollLeft = useRef<number>(0);
-  const hasMouseDragged = useRef<boolean>(false);
+  const touchStartX = useRef<number | null>(null);
+  const touchStartY = useRef<number | null>(null);
+  const touchLastX = useRef<number | null>(null);
+  const mouseStartX = useRef<number | null>(null);
+  const isSwiping = useRef<boolean>(false);
+  const hasSwipedRecently = useRef<boolean>(false);
 
-  const handleScroll = () => {
-    if (!scrollRef.current) return;
-    const scrollLeft = scrollRef.current.scrollLeft;
-    const width = scrollRef.current.clientWidth;
-    if (width > 0) {
-      const newIdx = Math.round(scrollLeft / width);
-      if (newIdx !== activeIdx) {
-        setActiveIdx(newIdx);
-      }
+  const markSwiped = () => {
+    hasSwipedRecently.current = true;
+    setTimeout(() => {
+      hasSwipedRecently.current = false;
+    }, 280);
+  };
+
+  const handleTouchStart = (e: TouchEvent) => {
+    if (!e.touches[0]) return;
+    touchStartX.current = e.touches[0].clientX;
+    touchStartY.current = e.touches[0].clientY;
+    touchLastX.current = e.touches[0].clientX;
+    isSwiping.current = false;
+  };
+
+  const handleTouchMove = (e: TouchEvent) => {
+    if (touchStartX.current === null || !e.touches[0]) return;
+    touchLastX.current = e.touches[0].clientX;
+    const deltaX = e.touches[0].clientX - touchStartX.current;
+    const deltaY = e.touches[0].clientY - (touchStartY.current ?? 0);
+
+    // If gesture is mostly horizontal, stop propagation so parent carousel doesn't hijack it
+    if (Math.abs(deltaX) > Math.abs(deltaY) && Math.abs(deltaX) > 8) {
+      isSwiping.current = true;
+      e.stopPropagation();
     }
   };
 
-  const scrollToIndex = (idx: number) => {
-    if (!scrollRef.current) return;
-    const width = scrollRef.current.clientWidth;
-    scrollRef.current.scrollTo({
-      left: idx * width,
-      behavior: "smooth",
-    });
-    setActiveIdx(idx);
+  const handleTouchEnd = (e: TouchEvent) => {
+    if (touchStartX.current !== null && touchLastX.current !== null && isSwiping.current) {
+      const deltaX = touchLastX.current - touchStartX.current;
+      if (deltaX < -25) {
+        // Swiped left -> show second image (green studio view)
+        setActiveIdx(1);
+        markSwiped();
+        e.stopPropagation();
+      } else if (deltaX > 25) {
+        // Swiped right -> show first image (natural light view)
+        setActiveIdx(0);
+        markSwiped();
+        e.stopPropagation();
+      }
+    }
+    touchStartX.current = null;
+    touchStartY.current = null;
+    touchLastX.current = null;
+    isSwiping.current = false;
   };
 
   const handleMouseDown = (e: MouseEvent) => {
-    if (!scrollRef.current) return;
-    isMouseDown.current = true;
-    hasMouseDragged.current = false;
-    mouseStartX.current = e.pageX - scrollRef.current.offsetLeft;
-    mouseScrollLeft.current = scrollRef.current.scrollLeft;
+    mouseStartX.current = e.clientX;
+    isSwiping.current = false;
   };
 
   const handleMouseMove = (e: MouseEvent) => {
-    if (!isMouseDown.current || !scrollRef.current) return;
-    const x = e.pageX - scrollRef.current.offsetLeft;
-    const walk = x - mouseStartX.current;
-    if (Math.abs(walk) > 6) {
-      hasMouseDragged.current = true;
-      scrollRef.current.scrollLeft = mouseScrollLeft.current - walk;
+    if (mouseStartX.current === null) return;
+    const deltaX = e.clientX - mouseStartX.current;
+    if (Math.abs(deltaX) > 10) {
+      isSwiping.current = true;
     }
   };
 
-  const handleMouseUp = () => {
-    if (!isMouseDown.current || !scrollRef.current) return;
-    isMouseDown.current = false;
-    if (hasMouseDragged.current) {
-      const width = scrollRef.current.clientWidth;
-      const newIdx = Math.round(scrollRef.current.scrollLeft / width);
-      scrollRef.current.scrollTo({ left: newIdx * width, behavior: "smooth" });
+  const handleMouseUp = (e: MouseEvent) => {
+    if (mouseStartX.current !== null && isSwiping.current) {
+      const deltaX = e.clientX - mouseStartX.current;
+      if (deltaX < -25) {
+        setActiveIdx(1);
+        markSwiped();
+      } else if (deltaX > 25) {
+        setActiveIdx(0);
+        markSwiped();
+      }
     }
+    mouseStartX.current = null;
+    isSwiping.current = false;
   };
 
   const phoneNumber = "918590123072";
@@ -211,9 +239,9 @@ Please share pricing and availability. Thank you!`;
     <article
       className="sig-product-card"
       data-product-id={product.id}
+      data-swiped={hasSwipedRecently.current ? "true" : "false"}
       onClick={() => {
-        if (hasMouseDragged.current) {
-          hasMouseDragged.current = false;
+        if (hasSwipedRecently.current || isSwiping.current) {
           return;
         }
         onProductClick?.(product);
@@ -229,38 +257,47 @@ Please share pricing and availability. Thank you!`;
         }
       }}
     >
-      <div className="sig-card-image-wrap">
-        <div
-          ref={scrollRef}
-          className="sig-card-image-box swiper-no-swiping"
-          onScroll={handleScroll}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={() => {
-            if (isMouseDown.current) handleMouseUp();
-          }}
-        >
-          {/* Slide 1: Original light background image */}
-          <div className="sig-image-slide">
-            <img
-              src={product.image}
-              alt={`${product.name} - natural view`}
-              loading="lazy"
-              className="sig-card-img"
-              draggable={false}
-            />
-          </div>
+      <div
+        className="sig-card-image-wrap"
+        onTouchStart={handleTouchStart}
+        onTouchMove={handleTouchMove}
+        onTouchEnd={handleTouchEnd}
+        onMouseDown={handleMouseDown}
+        onMouseMove={handleMouseMove}
+        onMouseUp={handleMouseUp}
+        onMouseLeave={() => {
+          mouseStartX.current = null;
+          isSwiping.current = false;
+        }}
+      >
+        <div className="sig-card-image-box">
+          <div
+            className="sig-image-track"
+            style={{
+              transform: `translateX(-${activeIdx * 50}%)`,
+            }}
+          >
+            {/* Slide 1: Original natural light view */}
+            <div className="sig-image-slide">
+              <img
+                src={product.image}
+                alt={`${product.name} - natural view`}
+                loading="lazy"
+                className="sig-card-img"
+                draggable={false}
+              />
+            </div>
 
-          {/* Slide 2: Green studio view (#055531 bg) */}
-          <div className="sig-image-slide sig-slide-green-bg">
-            <img
-              src={product.greenImage}
-              alt={`${product.name} - studio view`}
-              loading="lazy"
-              className="sig-card-img"
-              draggable={false}
-            />
+            {/* Slide 2: Green studio view (#055531 bg) */}
+            <div className="sig-image-slide sig-slide-green-bg">
+              <img
+                src={product.greenImage}
+                alt={`${product.name} - studio view`}
+                loading="lazy"
+                className="sig-card-img"
+                draggable={false}
+              />
+            </div>
           </div>
         </div>
 
@@ -273,7 +310,8 @@ Please share pricing and availability. Thank you!`;
               className={`sig-dot ${activeIdx === idx ? "active" : ""}`}
               onClick={(e) => {
                 e.stopPropagation();
-                scrollToIndex(idx);
+                setActiveIdx(idx);
+                markSwiped();
               }}
               aria-label={`View image ${idx + 1}`}
             />

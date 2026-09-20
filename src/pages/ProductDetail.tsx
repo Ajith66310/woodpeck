@@ -20,9 +20,12 @@ const CATEGORY_NAMES: Record<string, string> = {
 export function ProductDetailPage({ product, onProductClick }: ProductDetailPageProps) {
   const [activeIdx, setActiveIdx] = useState<number>(0)
 
-  // Reset active image index whenever the product changes
+  // Reset active image index and scroll to top whenever the product changes
   useEffect(() => {
     setActiveIdx(0)
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
   }, [product.id])
 
   const touchStartX = useRef<number | null>(null)
