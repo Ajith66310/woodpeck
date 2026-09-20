@@ -2043,11 +2043,6 @@ code {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: 22px;
-  height: 22px;
-  background-color: #f8fafc;
-  border: 1px solid #e2e8f0;
-  border-radius: 5px;
   font-family: var(--font-family-mono, monospace);
   font-size: 12px;
   font-weight: 700;
@@ -2060,6 +2055,7 @@ code {
   font-weight: 700;
   color: #64748b;
   line-height: 1;
+  margin: 0 1px;
 }
 
 .bestseller-swiper-container {
